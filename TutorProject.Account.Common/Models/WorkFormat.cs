@@ -1,9 +1,9 @@
-﻿namespace TutorProject.Account.Common
+﻿namespace TutorProject.Account.Common.Models
 {
     public enum WorkFormat
     {
         Online,
-        PupilHome,
+        ClientHome,
         TutorHome
     }
 }

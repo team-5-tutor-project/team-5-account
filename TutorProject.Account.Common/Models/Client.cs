@@ -1,4 +1,4 @@
-﻿namespace TutorProject.Account.Common
+﻿namespace TutorProject.Account.Common.Models
 {
     public class Client : User
     {
