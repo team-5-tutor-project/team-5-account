@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using TutorProject.Account.Common;
+using TutorProject.Account.Web.IoC;
 
 namespace TutorProject.Account.Web
 {
@@ -33,6 +34,11 @@ namespace TutorProject.Account.Web
                 options.UseNpgsql(connectionsString);
             });
 
+            services.AddMapper(config =>
+            {
+                config.AddProfile<AutomapperProfile>();
+            });
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
