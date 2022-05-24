@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace TutorProject.Web
+namespace TutorProject.Account.Web
 {
     public class Program
     {
