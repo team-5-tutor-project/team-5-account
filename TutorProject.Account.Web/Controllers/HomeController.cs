@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TutorProject.Account.Common;
 using TutorProject.Account.BLL.Clients.Services;
@@ -17,6 +18,7 @@ namespace TutorProject.Account.Web.Controllers
         private readonly TutorContext _tutorContext;
         private readonly IClientService _clientService;
         private readonly ITutorService _tutorService;
+        private readonly IMapper _mapper;
         
         public HomeController(TutorContext tutorContext)
         {
@@ -39,6 +41,8 @@ namespace TutorProject.Account.Web.Controllers
                 Name = ClientSignUp.Name,
                 Password = ClientSignUp.Password
             };
+            
+            //var client = _mapper.Map<Client>(ClientSignUp);
 
             return _clientService.SignUp(client);
         }
@@ -53,6 +57,8 @@ namespace TutorProject.Account.Web.Controllers
                 Name = TutorSignUp.Name,
                 Password = TutorSignUp.Password
             };
+            
+            //var tutor = _mapper.Map<Tutor>(TutorSignUp);
 
             return _tutorService.SignUp(tutor);
         }
@@ -60,13 +66,7 @@ namespace TutorProject.Account.Web.Controllers
         [HttpGet("/sign_in")]
         public Task<Guid> SignInClient(ClientSignInDto ClientSignIn)
         {
-            var client = new Client
-            {
-                Id = ClientSignIn.Id,
-                Login = ClientSignIn.Login,
-                Name = ClientSignIn.Name,
-                Password = ClientSignIn.Password
-            };
+            var client = _mapper.Map<Client>(ClientSignIn);
 
             return _clientService.SignIn(client);
         }
@@ -74,13 +74,8 @@ namespace TutorProject.Account.Web.Controllers
         [HttpGet("/sign_in")]
         public Task<Guid> SignInTutor(TutorSignInDto TutorSignIn)
         {
-            var tutor = new Tutor
-            {
-                Id = TutorSignIn.Id,
-                Login = TutorSignIn.Login,
-                Name = TutorSignIn.Name,
-                Password = TutorSignIn.Password
-            };
+            
+            var tutor = _mapper.Map<Tutor>(TutorSignIn);
 
             return _tutorService.SignIn(tutor);
         }
