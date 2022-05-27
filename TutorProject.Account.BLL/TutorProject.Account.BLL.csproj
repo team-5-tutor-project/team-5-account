@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\TutorProject.Account.Common\TutorProject.Account.Common.csproj" />
+        <ProjectReference Include="..\TutorProject.Account.Web\TutorProject.Account.Web.csproj" />
+    </ItemGroup>
+
+</Project>
