@@ -31,7 +31,7 @@ namespace TutorProject.Account.Web.Controllers
             return "Hello World!";
         }
         
-        [HttpGet("/sign_up")]
+        [HttpPost("/sign_up")]
         public Task<Guid> SignUpClient(ClientSignUpDto ClientSignUp)
         {
             var client = new Client
@@ -47,7 +47,7 @@ namespace TutorProject.Account.Web.Controllers
             return _clientService.SignUp(client);
         }
         
-        [HttpGet("/sign_up")]
+        [HttpPost("/sign_up")]
         public Task<Guid> SignUpTutor(TutorSignUpDto TutorSignUp)
         {
             var tutor = new Tutor
@@ -63,7 +63,7 @@ namespace TutorProject.Account.Web.Controllers
             return _tutorService.SignUp(tutor);
         }
         
-        [HttpGet("/sign_in")]
+        [HttpPatch("/sign_in")]
         public Task<Guid> SignInClient(ClientSignInDto ClientSignIn)
         {
             var client = _mapper.Map<Client>(ClientSignIn);
@@ -71,7 +71,7 @@ namespace TutorProject.Account.Web.Controllers
             return _clientService.SignIn(client);
         }
         
-        [HttpGet("/sign_in")]
+        [HttpPatch("/sign_in")]
         public Task<Guid> SignInTutor(TutorSignInDto TutorSignIn)
         {
             
