@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TutorProject.Account.Common.Models;
+using TutorProject.Account.Web.Controllers.ClientController.Data;
 
 namespace TutorProject.Account.BLL.Clients.Services
 {
@@ -9,16 +10,23 @@ namespace TutorProject.Account.BLL.Clients.Services
     {
         private List<Client> _clients;
 
-        public async Task<Guid> SignUp(Client client)
+        public async Task<Guid> SignUp(ClientSignUpData clientData)
         {
+            var client = new Client()
+            {
+                Id = Guid.NewGuid(),
+                Login = clientData.Login,
+                Name = clientData.Name,
+                Password = clientData.Password
+            };
             //заглушка
             return client.Id;
         }
 
-        public async Task<Guid> SignIn(Client client)
+        public async Task<Guid> SignIn(ClientSignInData clientData)
         {
             //заглушка
-            return client.Id;
+            return Guid.NewGuid();
         }
     }
 }

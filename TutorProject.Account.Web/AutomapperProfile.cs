@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using TutorProject.Account.Common.Models;
-using TutorProject.Account.Web.Controllers.Dto.Client;
-using TutorProject.Account.Web.Controllers.Dto.Tutor;
+using TutorProject.Account.Web.Controllers.ClientController.Data;
+using TutorProject.Account.Web.Controllers.ClientController.Dto;
+using TutorProject.Account.Web.Controllers.TutorController.Data;
+using TutorProject.Account.Web.Controllers.TutorController.Dto;
 
 namespace TutorProject.Account.Web
 {
@@ -10,10 +12,10 @@ namespace TutorProject.Account.Web
         public AutomapperProfile()
         {
             //CreateMap<Source, Result>();
-            CreateMap<ClientSignUpDto, Client>();
-            CreateMap<TutorSignUpDto, Tutor>();
-            CreateMap<ClientSignInDto, Client>();
-            CreateMap<TutorSignInDto, Tutor>();
+            CreateMap<ClientSignUpDto, ClientSignUpData>();
+            CreateMap<ClientSignInDto, ClientSignInData>();
+            CreateMap<TutorSignUpDto, TutorSignUpData>();
+            CreateMap<TutorSignInDto, TutorSignInData>();
         }
     }
 }

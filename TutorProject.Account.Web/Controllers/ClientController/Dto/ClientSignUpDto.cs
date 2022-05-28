@@ -1,8 +1,7 @@
-﻿namespace TutorProject.Account.Web.Controllers.Dto.Tutor
+﻿namespace TutorProject.Account.Web.Controllers.ClientController.Dto
 {
-    public class TutorSignUpDto
+    public class ClientSignUpDto
     {
-
         public string Name { get; set; }
         
         public string Login { get; set; }

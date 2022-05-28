@@ -1,11 +1,7 @@
-﻿using System;
-
-namespace TutorProject.Account.Web.Controllers.Dto.Tutor
+﻿namespace TutorProject.Account.Web.Controllers.ClientController.Data
 {
-    public class TutorSignInDto
+    public class ClientSignUpData
     {
-        public Guid Id { get; set; }
-        
         public string Name { get; set; }
         
         public string Login { get; set; }
