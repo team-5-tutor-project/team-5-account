@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using TutorProject.Account.BLL.Tutors.Data;
+using TutorProject.Account.BLL.Tutors.Dto;
 using TutorProject.Account.BLL.Tutors.Services;
 using TutorProject.Account.Common;
 using TutorProject.Account.Common.Models;
@@ -23,19 +25,31 @@ namespace TutorProject.Account.Web.Controllers.TutorController
         }
 
         [HttpPost("/sign_up")]
-        public Task<Guid> SignUpTutor(TutorSignUpDto TutorSignUp)
+        public Task<TutorLogInDto> SignUpTutor(TutorSignUpDto TutorSignUp)
         {
-            var clientData = _mapper.Map<TutorSignUpData>(TutorSignUp);
+            var tutorData = _mapper.Map<TutorSignUpData>(TutorSignUp);
+            var tutorDto = _tutorService.SignUp(tutorData);
 
-            return _tutorService.SignUp(clientData);
+            if (tutorDto == null)
+            {
+                throw new Exception(BadRequest().ToString());
+            }
+
+            return tutorDto;
         }
 
         [HttpPatch("/sign_in")]
-        public Task<Guid> SignInTutor(TutorSignInDto TutorSignIn)
+        public Task<TutorLogInDto> SignInTutor(TutorSignInDto TutorSignIn)
         {
-            var clientData = _mapper.Map<TutorSignInData>(TutorSignIn);
+            var tutorData = _mapper.Map<TutorSignInData>(TutorSignIn);
+            var tutorDto = _tutorService.SignIn(tutorData);
 
-            return _tutorService.SignIn(clientData);
+            if (tutorDto == null)
+            {
+                throw new Exception(BadRequest().ToString());
+            }
+
+            return tutorDto;
         }
     }
 }

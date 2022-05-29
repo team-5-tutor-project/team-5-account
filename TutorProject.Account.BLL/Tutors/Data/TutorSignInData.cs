@@ -1,6 +1,6 @@
-﻿namespace TutorProject.Account.Web.Controllers.ClientController.Data
+﻿namespace TutorProject.Account.BLL.Tutors.Data
 {
-    public class ClientSignInData
+    public class TutorSignInData
     {
         public string Login { get; set; }
         

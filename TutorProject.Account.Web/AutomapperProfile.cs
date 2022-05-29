@@ -1,4 +1,8 @@
 ﻿using AutoMapper;
+using TutorProject.Account.BLL.Clients.Data;
+using TutorProject.Account.BLL.Clients.Dto;
+using TutorProject.Account.BLL.Tutors.Data;
+using TutorProject.Account.BLL.Tutors.Dto;
 using TutorProject.Account.Common.Models;
 using TutorProject.Account.Web.Controllers.ClientController.Data;
 using TutorProject.Account.Web.Controllers.ClientController.Dto;
@@ -14,8 +18,11 @@ namespace TutorProject.Account.Web
             //CreateMap<Source, Result>();
             CreateMap<ClientSignUpDto, ClientSignUpData>();
             CreateMap<ClientSignInDto, ClientSignInData>();
+            CreateMap<Client, ClientLogInDto>();
+            CreateMap<Tutor, TutorLogInDto>();
             CreateMap<TutorSignUpDto, TutorSignUpData>();
             CreateMap<TutorSignInDto, TutorSignInData>();
+            
         }
     }
 }
