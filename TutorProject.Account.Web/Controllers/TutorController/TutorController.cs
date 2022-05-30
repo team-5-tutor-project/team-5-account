@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TutorProject.Account.BLL.Tutors.Data;
-using TutorProject.Account.BLL.Tutors.Dto;
+using TutorProject.Account.BLL.Tutors.Result;
 using TutorProject.Account.BLL.Tutors.Services;
 using TutorProject.Account.Common;
 using TutorProject.Account.Common.Models;

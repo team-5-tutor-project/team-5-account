@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TutorProject.Account.BLL.Clients.Data;
-using TutorProject.Account.BLL.Clients.Dto;
+using TutorProject.Account.BLL.Clients.Result;
 using TutorProject.Account.BLL.Clients.Services;
 using TutorProject.Account.Common;
 using TutorProject.Account.Web.Controllers.ClientController.Data;

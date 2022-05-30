@@ -1,6 +1,6 @@
 ﻿using TutorProject.Account.Common.Models;
 
-namespace TutorProject.Account.BLL.Tutors.Dto
+namespace TutorProject.Account.BLL.Tutors.Result
 {
     public class TutorLogInDto
     {

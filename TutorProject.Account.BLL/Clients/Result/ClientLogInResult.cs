@@ -1,4 +1,4 @@
-﻿namespace TutorProject.Account.BLL.Clients.Dto
+﻿namespace TutorProject.Account.BLL.Clients.Result
 {
     public class ClientLogInDto
     {

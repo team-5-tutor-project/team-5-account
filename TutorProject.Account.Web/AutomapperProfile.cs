@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using TutorProject.Account.BLL.Clients.Data;
-using TutorProject.Account.BLL.Clients.Dto;
+using TutorProject.Account.BLL.Clients.Result;
 using TutorProject.Account.BLL.Tutors.Data;
-using TutorProject.Account.BLL.Tutors.Dto;
+using TutorProject.Account.BLL.Tutors.Result;
 using TutorProject.Account.Common.Models;
 using TutorProject.Account.Web.Controllers.ClientController.Data;
 using TutorProject.Account.Web.Controllers.ClientController.Dto;
