@@ -13,6 +13,7 @@ using TutorProject.Account.Web.Controllers.TutorController.Dto;
 namespace TutorProject.Account.Web.Controllers.TutorController
 {
     [Controller]
+    [Route("tutor")]
     public class TutorController : Controller
     {
         private readonly TutorContext _tutorContext;

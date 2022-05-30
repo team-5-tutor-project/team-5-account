@@ -19,9 +19,9 @@ namespace TutorProject.Account.BLL.Clients.Services
 
         public async Task<ClientLogInDto> SignUp(ClientSignUpData clientData)
         {
-            var isExists = _context.Clients.AnyAsync(client => client.Login == clientData.Login);
+            var isExists = await _context.Clients.AnyAsync(client => client.Login == clientData.Login);
 
-            if (isExists.Result)
+            if (isExists)
             {
                 return null;
             }
@@ -34,8 +34,8 @@ namespace TutorProject.Account.BLL.Clients.Services
                 Password = clientData.Password
             };
 
-            _context.Clients.AddAsync(client);
-            _context.SaveChangesAsync();
+            await _context.Clients.AddAsync(client);
+            await _context.SaveChangesAsync();
             
             var clientLogIn = _mapper.Map<ClientLogInDto>(client);
             
@@ -44,14 +44,14 @@ namespace TutorProject.Account.BLL.Clients.Services
 
         public async Task<ClientLogInDto> SignIn(ClientSignInData clientData)
         {
-            var isExists = _context.Clients.AnyAsync(client => client.Login == clientData.Login &&
-                                                               client.Password == clientData.Password);
-            if (!isExists.Result)
+            var isExists = await _context.Clients.AnyAsync(client => client.Login == clientData.Login &&
+                                                                     client.Password == clientData.Password);
+            if (!isExists)
             {
                 return null;
             }
 
-            var client = _context.Clients.FindAsync(clientData.Login);
+            var client = await _context.Clients.FindAsync(clientData.Login);
                 
             var clientLogIn = _mapper.Map<ClientLogInDto>(client);    
                 
