@@ -13,7 +13,7 @@ using TutorProject.Account.Web.Controllers.ClientController.Dto;
 namespace TutorProject.Account.Web.Controllers.ClientController
 {
     [Controller]
-    [Route("client")]
+    [Route("api/ClientController")]
     public class ClientController : Controller
     {
         private readonly TutorContext _tutorContext;
