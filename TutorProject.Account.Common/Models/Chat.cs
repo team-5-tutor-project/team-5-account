@@ -4,10 +4,10 @@ namespace TutorProject.Account.Common.Models
 {
     public class Chat
     {
-        public Guid ChatId { get; private init; }
+        public Guid ChatId { get; init; }
         
-        public Tutor Tutor { get; private init; }
+        public Tutor Tutor { get; init; }
         
-        public Client Client { get; private init; }
+        public Client Client { get; init; }
     }
 }

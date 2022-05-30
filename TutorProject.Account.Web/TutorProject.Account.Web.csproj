@@ -11,7 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TutorProject.Account.Common\TutorProject.Account.Common.csproj" />
+        <ProjectReference Include="..\TutorProject.Account.BLL\TutorProject.Account.BLL.csproj" />
+        <ProjectReference Include="..\TutorProject.Account.Common\TutorProject.Account.Common.csproj" />
     </ItemGroup>
 
 </Project>

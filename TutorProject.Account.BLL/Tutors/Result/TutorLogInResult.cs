@@ -1,9 +1,11 @@
-﻿using System;
+﻿using TutorProject.Account.Common.Models;
 
-namespace TutorProject.Account.Common.Models
+namespace TutorProject.Account.BLL.Tutors.Result
 {
-    public class Tutor : User
+    public class TutorLogInResult
     {
+        public string Name { get; set; }
+        
         public WorkFormat WorkFormat { get; set; }
         
         public int PricePerHour { get; set; }

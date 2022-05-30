@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TutorProject.Account.Common
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TutorProject.Account.Web", "TutorProject.Account.Web\TutorProject.Account.Web.csproj", "{73A27464-AB86-400F-9C7E-F27774270B1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TutorProject.Account.BLL", "TutorProject.Account.BLL\TutorProject.Account.BLL.csproj", "{5263382F-691F-4A82-9E08-B09681DA194D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{73A27464-AB86-400F-9C7E-F27774270B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73A27464-AB86-400F-9C7E-F27774270B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73A27464-AB86-400F-9C7E-F27774270B1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5263382F-691F-4A82-9E08-B09681DA194D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5263382F-691F-4A82-9E08-B09681DA194D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5263382F-691F-4A82-9E08-B09681DA194D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5263382F-691F-4A82-9E08-B09681DA194D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
