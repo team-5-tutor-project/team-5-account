@@ -2,7 +2,7 @@
 
 namespace TutorProject.Account.BLL.Tutors.Result
 {
-    public class TutorLogInDto
+    public class TutorLogInResult
     {
         public string Name { get; set; }
         

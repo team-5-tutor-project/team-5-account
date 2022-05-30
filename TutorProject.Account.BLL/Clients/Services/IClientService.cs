@@ -9,7 +9,7 @@ namespace TutorProject.Account.BLL.Clients.Services
 {
     public interface IClientService
     {
-        Task<ClientLogInDto> SignUp(ClientSignUpData clientData);
-        Task<ClientLogInDto> SignIn(ClientSignInData clientData);
+        Task<ClientLogInResult> SignUp(ClientSignUpData clientData);
+        Task<ClientLogInResult> SignIn(ClientSignInData clientData);
     }
 }

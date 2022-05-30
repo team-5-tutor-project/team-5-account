@@ -26,7 +26,7 @@ namespace TutorProject.Account.Web.Controllers.ClientController
         }
 
         [HttpPost("/sign_up")]
-        public Task<ClientLogInDto> SignUpClient(ClientSignUpDto ClientSignUp)
+        public Task<ClientLogInResult> SignUpClient(ClientSignUpDto ClientSignUp)
         {
             var clientData = _mapper.Map<ClientSignUpData>(ClientSignUp);
             var clientDto = _clientService.SignUp(clientData);
@@ -40,7 +40,7 @@ namespace TutorProject.Account.Web.Controllers.ClientController
         }
 
         [HttpPatch("/sign_in")]
-        public Task<ClientLogInDto> SignInClient(ClientSignInDto ClientSignIn)
+        public Task<ClientLogInResult> SignInClient(ClientSignInDto ClientSignIn)
         {
             var clientData = _mapper.Map<ClientSignInData>(ClientSignIn);
             var clientDto = _clientService.SignIn(clientData);

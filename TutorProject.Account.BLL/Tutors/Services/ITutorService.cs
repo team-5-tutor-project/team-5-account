@@ -9,7 +9,7 @@ namespace TutorProject.Account.BLL.Tutors.Services
 {
     public interface ITutorService
     {
-        Task<TutorLogInDto> SignUp(TutorSignUpData tutorData);
-        Task<TutorLogInDto> SignIn(TutorSignInData tutorData);
+        Task<TutorLogInResult> SignUp(TutorSignUpData tutorData);
+        Task<TutorLogInResult> SignIn(TutorSignInData tutorData);
     }
 }

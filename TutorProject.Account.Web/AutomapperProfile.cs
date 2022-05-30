@@ -18,8 +18,8 @@ namespace TutorProject.Account.Web
             //CreateMap<Source, Result>();
             CreateMap<ClientSignUpDto, ClientSignUpData>();
             CreateMap<ClientSignInDto, ClientSignInData>();
-            CreateMap<Client, ClientLogInDto>();
-            CreateMap<Tutor, TutorLogInDto>();
+            CreateMap<Client, ClientLogInResult>();
+            CreateMap<Tutor, TutorLogInResult>();
             CreateMap<TutorSignUpDto, TutorSignUpData>();
             CreateMap<TutorSignInDto, TutorSignInData>();
             

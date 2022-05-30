@@ -16,7 +16,7 @@ namespace TutorProject.Account.BLL.Tutors.Services
         private readonly TutorContext _context;
         private readonly Mapper _mapper;
 
-        public async Task<TutorLogInDto> SignUp(TutorSignUpData tutorData)
+        public async Task<TutorLogInResult> SignUp(TutorSignUpData tutorData)
         {
             var isExists = await _context.Tutors.AnyAsync(tutor => tutor.Login == tutorData.Login);
 
@@ -36,12 +36,12 @@ namespace TutorProject.Account.BLL.Tutors.Services
             await _context.Tutors.AddAsync(tutor);
             await _context.SaveChangesAsync();
             
-            var tutorLogIn = _mapper.Map<TutorLogInDto>(tutor);
+            var tutorLogIn = _mapper.Map<TutorLogInResult>(tutor);
             
             return tutorLogIn;
         }
 
-        public async Task<TutorLogInDto> SignIn(TutorSignInData tutorData)
+        public async Task<TutorLogInResult> SignIn(TutorSignInData tutorData)
         {
             var isExists = await _context.Tutors.AnyAsync(tutor => tutor.Login == tutorData.Login && 
                                                                    tutor.Password == tutorData.Password);
@@ -52,7 +52,7 @@ namespace TutorProject.Account.BLL.Tutors.Services
 
             var tutor = await _context.Tutors.FindAsync(tutorData.Login);
                 
-            var tutorLogIn = _mapper.Map<TutorLogInDto>(tutor);    
+            var tutorLogIn = _mapper.Map<TutorLogInResult>(tutor);    
                 
             return tutorLogIn;
         }
