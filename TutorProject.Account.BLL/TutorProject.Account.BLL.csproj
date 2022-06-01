@@ -6,11 +6,5 @@
 
     <ItemGroup>
         <ProjectReference Include="..\TutorProject.Account.Common\TutorProject.Account.Common.csproj" />
-        <ProjectReference Include="..\TutorProject.Account.Web\TutorProject.Account.Web.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Tutors\Dto" />
-    </ItemGroup>
-
 </Project>

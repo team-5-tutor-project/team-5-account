@@ -13,44 +13,44 @@ using TutorProject.Account.Web.Controllers.ClientController.Dto;
 namespace TutorProject.Account.Web.Controllers.ClientController
 {
     [Controller]
-    [Route("api/ClientController")]
+    [Route("api/clients")]
     public class ClientController : Controller
     {
-        private readonly TutorContext _tutorContext;
         private readonly IClientService _clientService;
         private readonly IMapper _mapper;
         
-        public ClientController(TutorContext tutorContext)
+        public ClientController(IClientService clientService, IMapper mapper)
         {
-            _tutorContext = tutorContext;
+            _clientService = clientService;
+            _mapper = mapper;
         }
 
-        [HttpPost("/sign_up")]
-        public Task<ClientLogInResult> SignUpClient(ClientSignUpDto ClientSignUp)
+        [HttpPost("sign_up")]
+        public async Task<ClientLogInResult> SignUpClient([FromBody] ClientSignUpDto ClientSignUp)
         {
             var clientData = _mapper.Map<ClientSignUpData>(ClientSignUp);
-            var clientDto = _clientService.SignUp(clientData);
+            var client = await _clientService.SignUp(clientData);
 
-            if (clientDto == null)
+            if (client == null)
             {
                 throw new Exception(BadRequest().ToString());
             }
 
-            return clientDto;
+            return _mapper.Map<ClientLogInResult>(client);
         }
 
-        [HttpPatch("/sign_in")]
-        public Task<ClientLogInResult> SignInClient(ClientSignInDto ClientSignIn)
+        [HttpPatch("sign_in")]
+        public async Task<ClientLogInResult> SignInClient([FromBody] ClientSignInDto ClientSignIn)
         {
             var clientData = _mapper.Map<ClientSignInData>(ClientSignIn);
-            var clientDto = _clientService.SignIn(clientData);
+            var client = await _clientService.SignIn(clientData);
 
-            if (clientDto == null)
+            if (client == null)
             {
                 throw new Exception(BadRequest().ToString());
             }
 
-            return clientDto;
+            return _mapper.Map<ClientLogInResult>(client);
         }
     }
 }

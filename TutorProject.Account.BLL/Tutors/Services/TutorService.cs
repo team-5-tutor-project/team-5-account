@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TutorProject.Account.BLL.Tutors.Data;
 using TutorProject.Account.BLL.Tutors.Result;
@@ -14,13 +13,17 @@ namespace TutorProject.Account.BLL.Tutors.Services
     public class TutorService : ITutorService
     {
         private readonly TutorContext _context;
-        private readonly Mapper _mapper;
 
-        public async Task<TutorLogInResult> SignUp(TutorSignUpData tutorData)
+        public TutorService(TutorContext context)
         {
-            var isExists = await _context.Tutors.AnyAsync(tutor => tutor.Login == tutorData.Login);
+            _context = context;
+        }
 
-            if (isExists)
+        public async Task<Tutor> SignUp(TutorSignUpData tutorData)
+        {
+            var tutorWithSameLogin = await _context.Tutors.FirstOrDefaultAsync(tutor => tutor.Login == tutorData.Login);
+
+            if (tutorWithSameLogin is not null)
             {
                 return null;
             }
@@ -35,26 +38,14 @@ namespace TutorProject.Account.BLL.Tutors.Services
             
             await _context.Tutors.AddAsync(tutor);
             await _context.SaveChangesAsync();
-            
-            var tutorLogIn = _mapper.Map<TutorLogInResult>(tutor);
-            
-            return tutorLogIn;
+
+            return tutor;
         }
 
-        public async Task<TutorLogInResult> SignIn(TutorSignInData tutorData)
+        public Task<Tutor> SignIn(TutorSignInData tutorData)
         {
-            var isExists = await _context.Tutors.AnyAsync(tutor => tutor.Login == tutorData.Login && 
-                                                                   tutor.Password == tutorData.Password);
-            if (!isExists)
-            {
-                return null;
-            }
-
-            var tutor = await _context.Tutors.FindAsync(tutorData.Login);
-                
-            var tutorLogIn = _mapper.Map<TutorLogInResult>(tutor);    
-                
-            return tutorLogIn;
+            return _context.Tutors.SingleOrDefaultAsync(tutor => tutor.Login == tutorData.Login && 
+                                                              tutor.Password == tutorData.Password);
         }
     }
 }
