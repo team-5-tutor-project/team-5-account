@@ -1,23 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Threading.Tasks;
-using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TutorProject.Account.BLL.Clients.Data;
 using TutorProject.Account.BLL.Clients.Result;
 using TutorProject.Account.Common;
 using TutorProject.Account.Common.Models;
 using TutorProject.Account.Web.Controllers.ClientController.Data;
-using TutorProject.Account.Web.Controllers.TutorController.Data;
 
 namespace TutorProject.Account.BLL.Clients.Services
 {
     public class ClientService : IClientService
     {
         private readonly TutorContext _context;
-        private readonly Mapper _mapper;
 
-        public async Task<ClientLogInResult> SignUp(ClientSignUpData clientData)
+        public ClientService(TutorContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<Client> SignUp(ClientSignUpData clientData)
         {
             var isExists = await _context.Clients.AnyAsync(client => client.Login == clientData.Login);
 
@@ -25,7 +26,7 @@ namespace TutorProject.Account.BLL.Clients.Services
             {
                 return null;
             }
-            
+
             var client = new Client()
             {
                 Id = Guid.NewGuid(),
@@ -36,26 +37,14 @@ namespace TutorProject.Account.BLL.Clients.Services
 
             await _context.Clients.AddAsync(client);
             await _context.SaveChangesAsync();
-            
-            var clientLogIn = _mapper.Map<ClientLogInResult>(client);
-            
-            return clientLogIn;
+
+            return client;
         }
 
-        public async Task<ClientLogInResult> SignIn(ClientSignInData clientData)
+        public Task<Client> SignIn(ClientSignInData clientData)
         {
-            var isExists = await _context.Clients.AnyAsync(client => client.Login == clientData.Login &&
-                                                                     client.Password == clientData.Password);
-            if (!isExists)
-            {
-                return null;
-            }
-
-            var client = await _context.Clients.FindAsync(clientData.Login);
-                
-            var clientLogIn = _mapper.Map<ClientLogInResult>(client);    
-                
-            return clientLogIn;
+            return _context.Clients.SingleOrDefaultAsync(client => client.Login == clientData.Login &&
+                                                                   client.Password == clientData.Password);
         }
     }
 }

@@ -38,7 +38,9 @@ namespace TutorProject.Account.Web
             {
                 config.AddProfile<AutomapperProfile>();
             });
-            
+
+            services.AddBllServices();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -48,6 +50,8 @@ namespace TutorProject.Account.Web
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseDeveloperExceptionPage();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

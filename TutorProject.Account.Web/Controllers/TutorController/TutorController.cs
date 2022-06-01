@@ -13,44 +13,44 @@ using TutorProject.Account.Web.Controllers.TutorController.Dto;
 namespace TutorProject.Account.Web.Controllers.TutorController
 {
     [Controller]
-    [Route("api/TutorController")]
+    [Route("api/tutors")]
     public class TutorController : Controller
     {
-        private readonly TutorContext _tutorContext;
         private readonly ITutorService _tutorService;
         private readonly IMapper _mapper;
         
-        public TutorController(TutorContext tutorContext)
+        public TutorController(ITutorService tutorService, IMapper mapper)
         {
-            _tutorContext = tutorContext;
+            _tutorService = tutorService;
+            _mapper = mapper;
         }
 
-        [HttpPost("/sign_up")]
-        public Task<TutorLogInResult> SignUpTutor(TutorSignUpDto TutorSignUp)
+        [HttpPost("sign_up")]
+        public async Task<TutorLogInResult> SignUpTutor([FromBody] TutorSignUpDto TutorSignUp)
         {
             var tutorData = _mapper.Map<TutorSignUpData>(TutorSignUp);
-            var tutorDto = _tutorService.SignUp(tutorData);
+            var tutor = await _tutorService.SignUp(tutorData);
 
-            if (tutorDto == null)
+            if (tutor == null)
             {
                 throw new Exception(BadRequest().ToString());
             }
 
-            return tutorDto;
+            return _mapper.Map<TutorLogInResult>(tutor);
         }
 
-        [HttpPatch("/sign_in")]
-        public Task<TutorLogInResult> SignInTutor(TutorSignInDto TutorSignIn)
+        [HttpPatch("sign_in")]
+        public async Task<TutorLogInResult> SignInTutor([FromBody] TutorSignInDto TutorSignIn)
         {
             var tutorData = _mapper.Map<TutorSignInData>(TutorSignIn);
-            var tutorDto = _tutorService.SignIn(tutorData);
+            var tutor = await _tutorService.SignIn(tutorData);
 
-            if (tutorDto == null)
+            if (tutor == null)
             {
                 throw new Exception(BadRequest().ToString());
             }
 
-            return tutorDto;
+            return _mapper.Map<TutorLogInResult>(tutor);
         }
     }
 }
