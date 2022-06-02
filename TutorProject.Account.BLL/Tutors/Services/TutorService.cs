@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TutorProject.Account.BLL.Tutors.Data;
 using TutorProject.Account.BLL.Tutors.Result;
+using TutorProject.Account.BLL.Utils;
 using TutorProject.Account.Common;
 using TutorProject.Account.Common.Models;
 using TutorProject.Account.Web.Controllers.TutorController.Data;
@@ -46,6 +47,23 @@ namespace TutorProject.Account.BLL.Tutors.Services
         {
             return _context.Tutors.SingleOrDefaultAsync(tutor => tutor.Login == tutorData.Login && 
                                                               tutor.Password == tutorData.Password);
+        }
+
+        public async Task ChangeDescription(Guid tutorId, ChangeDescriptionData data)
+        {
+            var tutor = await _context.Tutors.SingleOrDefaultAsync(tutor => tutor.Id == tutorId);
+
+            if (tutor is null)
+                throw new BusinessLogicException($"Отсутствует репетитор с заданным ID: {tutorId}");
+
+            tutor.Description = data.Description;
+            tutor.WorkFormat = data.WorkFormat ?? tutor.WorkFormat;
+            tutor.PricePerHour = data.PricePerHour ?? tutor.PricePerHour;
+            tutor.PupilMinClass = data.PupilMinClass ?? tutor.PupilMinClass;
+            tutor.PupilMaxClass = data.PupilMaxClass ?? tutor.PupilMaxClass;
+
+            _context.Update(tutor);
+            await _context.SaveChangesAsync();
         }
     }
 }

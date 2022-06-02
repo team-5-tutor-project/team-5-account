@@ -52,5 +52,12 @@ namespace TutorProject.Account.Web.Controllers.TutorController
 
             return _mapper.Map<TutorLogInResult>(tutor);
         }
+
+        [HttpPatch("{tutorId:guid}")]
+        public async Task ChangeDescription(Guid tutorId, [FromBody] ChangeDescriptionDto changeDescriptionDto)
+        {
+            var changeDescriptionData = _mapper.Map<ChangeDescriptionData>(changeDescriptionDto);
+            await _tutorService.ChangeDescription(tutorId, changeDescriptionData);
+        }
     }
 }

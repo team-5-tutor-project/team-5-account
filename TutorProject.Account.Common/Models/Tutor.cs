@@ -6,6 +6,8 @@ namespace TutorProject.Account.Common.Models
     {
         public WorkFormat WorkFormat { get; set; }
         
+        public string Description { get; set; }
+        
         public int PricePerHour { get; set; }
         
         public int PupilMinClass { get; set; }
