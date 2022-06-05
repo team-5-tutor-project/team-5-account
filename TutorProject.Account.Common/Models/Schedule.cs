@@ -4,7 +4,7 @@ namespace TutorProject.Account.Common.Models
 {
     public class Schedule
     {
-        public Guid ScheduleId { get; init; }
+        public Guid Id { get; init; }
         
         public Tutor Tutor { get; init; }
 
