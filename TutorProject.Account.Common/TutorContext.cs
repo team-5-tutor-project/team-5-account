@@ -16,5 +16,6 @@ namespace TutorProject.Account.Common
         public DbSet<TutorToSubject> TutorToSubjects { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
     }
 }
