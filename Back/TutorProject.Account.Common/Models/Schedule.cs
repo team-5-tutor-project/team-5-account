@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TutorProject.Account.Common.Models
 {
@@ -8,6 +9,6 @@ namespace TutorProject.Account.Common.Models
         
         public Tutor Tutor { get; init; }
 
-        public bool[,] FreeTimeSchedule { get; init; } = new bool[7, 12];
+        public List<Day> FreeTimeSchedule { get; init; } = new List<Day>();
     }
 }

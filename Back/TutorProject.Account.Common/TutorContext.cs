@@ -17,5 +17,7 @@ namespace TutorProject.Account.Common
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<Day> Days{ get; set; }
+        
     }
 }
