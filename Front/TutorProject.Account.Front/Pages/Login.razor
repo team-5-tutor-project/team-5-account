@@ -1,0 +1,19 @@
+﻿@page "/Login"
+@using TutorProject.Account.Front.Models
+@inject HttpClient _http
+@inject NavigationManager NavigationManager
+
+<title>TutorService</title>
+<h1>Добро пожаловать в TutorService</h1>
+<p><input placeholder="login"></p>
+<p><input type="password" placeholder="password"></p>
+<button @onclick="@OnButtonClick"></button>
+
+
+@code {
+    void OnButtonClick()
+    {
+        CurrentUser.Login(new Client(Guid.NewGuid(), "Mikhail"));
+        NavigationManager.NavigateTo("/Account");
+    }
+}
