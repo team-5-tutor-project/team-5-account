@@ -1,0 +1,82 @@
+﻿@page "/chats"
+@using TutorProject.Account.Front.Models
+@inject NavigationManager NavigationManager
+@inject HttpClient _http
+<PageTitle>Chats</PageTitle>
+
+<h1>Chats</h1>
+
+@if (!CurrentUser.IsAuthorized)
+{
+    NavigationManager.NavigateTo("/Login");
+}
+
+@if (_chats == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (CurrentUser.User is Tutor)
+        {
+            @foreach (var chat in _chats)
+            {
+                <tr>
+                    <td>@chat.ClientName</td>
+                    <td>Link</td>
+                </tr>
+            }
+        }
+        @if (CurrentUser.User is Client)
+                {
+                    @foreach (var chat in _chats)
+                    {
+                        <tr>
+                            <td>@chat.TutorName</td>
+                            <button class="btn btn-primary" @onclick="(() => TransferToChat(chat.ChatId))">Link</button>
+                        </tr>
+                    }
+                }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Chat> _chats;
+
+    private async Task GetChats()
+    {
+        var response = await _http.GetAsync($"{CurrentUser.User.Id}/chats");
+        _chats = response.Content.ReadFromJsonAsync<List<Chat>>().Result;
+        
+        // to test
+        /*_chats = new List<Chat>()
+        {
+            new Chat(new Guid(), "Ilya", "Misha"),
+            new Chat(new Guid(), "Ilya2", "Misha"),
+            new Chat(new Guid(), "Ilya3", "Misha"),
+            new Chat(new Guid(), "Ilya4", "Misha")
+        };*/
+    }
+
+    private async void TransferToChat(Guid ChatID)
+    {
+        var response = await _http.GetAsync($"{ChatID}/getlink");
+        string link = response.Content.ReadFromJsonAsync<string>().Result;
+        NavigationManager.NavigateTo(link);
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await GetChats();
+    }
+
+}
