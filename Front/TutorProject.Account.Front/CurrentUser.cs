@@ -5,7 +5,7 @@ namespace TutorProject.Account.Front;
 
 public static class CurrentUser
 {
-    private static User _user;
+    private static User _user = new Client(Guid.Parse("01c742cd-8f7d-4801-bd95-d188e96635cc"), "fefa");
 
     private static bool _isAuthtorized;
 

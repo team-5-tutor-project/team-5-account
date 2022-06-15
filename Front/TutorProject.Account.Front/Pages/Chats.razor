@@ -54,7 +54,7 @@ else
 
     private async Task GetChats()
     {
-        var response = await _http.GetAsync($"{CurrentUser.User.Id}/chats");
+        var response = await _http.GetAsync($"/api/chats/clients/{CurrentUser.User.Id}/chats");
         _chats = response.Content.ReadFromJsonAsync<List<Chat>>().Result;
         
         // to test
