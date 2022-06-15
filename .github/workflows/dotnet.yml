@@ -7,13 +7,12 @@ on:
     branches: [ master ]
 
 env:
-  BACK_SOLUTION_PATH: Back\TutorProject.Account.sln
+  BACK_SOLUTION_PATH: Back/TutorProject.Account.sln
+  ASPNETCORE_URLS: "http://localhost:80"
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -26,3 +25,15 @@ jobs:
       run: dotnet build $BACK_SOLUTION_PATH --no-restore
     - name: Test
       run: dotnet test $BACK_SOLUTION_PATH --no-build --verbosity normal
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Authorize Docker Hub
+      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+    - uses: actions/checkout@v3
+    - name: Build docker image
+      run: docker build -t back-image -f Back/TutorProject.Account.Web/Dockerfile .
+    - name: Tag image to push
+      run: docker tag back-image kawwik/tutor-project-back
+    - name: Push to Docker Hub
+      run: docker push kawwik/tutor-project-back
