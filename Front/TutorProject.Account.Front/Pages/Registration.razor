@@ -1,0 +1,71 @@
+﻿@page "/Registration"
+@using TutorProject.Account.Front.Models
+@using TutorProject.Account.Front.Dtos.Registation
+@inject HttpService _httpService
+@inject NavigationManager NavigationManager
+
+<h1>Регистрация в TutorService</h1>
+<h2>Зарегестрироваться как 
+<button class="btn btn-primary" @onclick="ChangeUserType">
+    @switch (UserType)
+    {
+        case UserType.Client:
+            <a>Ученик</a>
+            break;
+        case UserType.Tutor:
+            <a>Репетитор</a>
+            break;
+    }
+</button>
+</h2>
+<p></p>
+<p><input @bind="Username" placeholder="login"></p>
+<p><input @bind="Password" type="password" placeholder="password"></p>
+<p><input @bind="Name" placeholder="Имя"/></p>
+<p></p>
+<button class="btn btn-dark" @onclick="OnSignUpButtonClick">Зарегистрироваться</button>
+<p></p>
+<p>Уже есть аккаунт? <a href="Login">Войти</a></p>
+@if (RegistrationFailed)
+{
+    <p>Пользователь с таким логином уже существует</p>
+}
+
+
+@code {
+    private UserType UserType { get; set; }
+    
+    private string Username { get; set; }
+    private string Password { get; set; }
+    private string Name { get; set; }
+    
+    private bool RegistrationFailed { get; set; }
+    
+    void ChangeUserType()
+    {
+        UserType = UserType switch {
+            UserType.Client => UserType.Tutor,
+            UserType.Tutor => UserType.Client,
+            _ => throw new InvalidOperationException()
+            };
+    }
+    
+    async Task OnSignUpButtonClick()
+    {
+        var registrationRequest = new RegistrationRequestDto
+        {
+            Login = Username,
+            Name = Name,
+            Password = Password
+        };
+
+        var registrationUri = "api/" + (UserType == UserType.Client ? "clients" : "tutors") + "/sign_up";
+
+        var result = await _httpService.PostWithBody<RegistrationRequestDto>(registrationUri, registrationRequest);
+        
+        if (result.IsSuccessful)
+            NavigationManager.NavigateTo("/Account");
+
+        RegistrationFailed = true;
+    }
+}

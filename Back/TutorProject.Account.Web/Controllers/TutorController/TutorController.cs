@@ -26,29 +26,25 @@ namespace TutorProject.Account.Web.Controllers.TutorController
         }
 
         [HttpPost("sign_up")]
-        public async Task<TutorLogInResult> SignUpTutor([FromBody] TutorSignUpDto TutorSignUp)
+        public async Task<ActionResult<TutorLogInResult>> SignUpTutor([FromBody] TutorSignUpDto TutorSignUp)
         {
             var tutorData = _mapper.Map<TutorSignUpData>(TutorSignUp);
             var tutor = await _tutorService.SignUp(tutorData);
 
             if (tutor == null)
-            {
-                throw new Exception(BadRequest().ToString());
-            }
+                return BadRequest();
 
             return _mapper.Map<TutorLogInResult>(tutor);
         }
 
         [HttpPatch("sign_in")]
-        public async Task<TutorLogInResult> SignInTutor([FromBody] TutorSignInDto TutorSignIn)
+        public async Task<ActionResult<TutorLogInResult>> SignInTutor([FromBody] TutorSignInDto TutorSignIn)
         {
             var tutorData = _mapper.Map<TutorSignInData>(TutorSignIn);
             var tutor = await _tutorService.SignIn(tutorData);
 
             if (tutor == null)
-            {
-                throw new Exception(BadRequest().ToString());
-            }
+                return BadRequest("Неверный логин или пароль");
 
             return _mapper.Map<TutorLogInResult>(tutor);
         }

@@ -1,19 +1,67 @@
 ﻿@page "/Login"
+@using TutorProject.Account.Front.Dtos
 @using TutorProject.Account.Front.Models
-@inject HttpClient _http
 @inject NavigationManager NavigationManager
+@inject HttpService _httpService
 
 <title>TutorService</title>
 <h1>Добро пожаловать в TutorService</h1>
-<p><input placeholder="login"></p>
-<p><input type="password" placeholder="password"></p>
-<button @onclick="@OnButtonClick"></button>
-
+<h2>Войти как 
+<button class="btn btn-primary" @onclick="ChangeUserType">
+    @switch (UserType)
+    {
+        case UserType.Client:
+            <a>Ученик</a>
+            break;
+        case UserType.Tutor:
+            <a>Репетитор</a>
+            break;
+    }
+</button>
+</h2>
+<p></p>
+<p><input @bind="Username" placeholder="login"></p>
+<p><input @bind="Password" type="password" placeholder="password"></p>
+@if (LoginFailed)
+{
+    <p>Ошибка! Не найден пользователь с введёнными данными.</p>
+}
+<button class="btn btn-dark" @onclick="@OnLoginButtonClick">Войти</button>
+<p></p>
+<p>Ещё нет аккаунта? <a href="Registration">Регистрация</a></p>
 
 @code {
-    void OnButtonClick()
+    private UserType UserType { get; set; }
+    
+    private string Username { get; set; }
+    private string Password { get; set; }
+    
+    private bool LoginFailed { get; set; }
+    
+    void ChangeUserType()
     {
-        CurrentUser.Login(new Client(Guid.NewGuid(), "Mikhail"));
-        NavigationManager.NavigateTo("/Account");
+        UserType = UserType switch {
+            UserType.Client => UserType.Tutor,
+            UserType.Tutor => UserType.Client,
+            _ => throw new InvalidOperationException()
+        };
+    }
+
+    async Task OnLoginButtonClick()
+    {
+        var loginRequest = new LoginRequestDto
+        {
+            Login = Username,
+            Password = Password
+        };
+
+        var loginUri = "api/" + (UserType == UserType.Client ? "clients" : "tutors") + "/sign_in";
+
+        var result = await _httpService.PatchWithBody<LoginResponseDto>(loginUri, loginRequest);
+        
+        if (result.IsSuccessful)
+            NavigationManager.NavigateTo("/Account");
+
+        LoginFailed = true;
     }
 }

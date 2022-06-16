@@ -6,6 +6,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TutorProject.Account.Web", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TutorProject.Account.BLL", "TutorProject.Account.BLL\TutorProject.Account.BLL.csproj", "{5263382F-691F-4A82-9E08-B09681DA194D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{3DCD60DD-7D8A-4F58-8102-E47B10BE45B1}"
+	ProjectSection(SolutionItems) = preProject
+		Sequence.puml = Sequence.puml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
