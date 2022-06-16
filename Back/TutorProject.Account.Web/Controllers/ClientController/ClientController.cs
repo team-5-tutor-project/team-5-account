@@ -26,29 +26,25 @@ namespace TutorProject.Account.Web.Controllers.ClientController
         }
 
         [HttpPost("sign_up")]
-        public async Task<ClientLogInResult> SignUpClient([FromBody] ClientSignUpDto ClientSignUp)
+        public async Task<ActionResult<ClientLogInResult>> SignUpClient([FromBody] ClientSignUpDto ClientSignUp)
         {
             var clientData = _mapper.Map<ClientSignUpData>(ClientSignUp);
             var client = await _clientService.SignUp(clientData);
 
             if (client == null)
-            {
-                throw new Exception(BadRequest().ToString());
-            }
+                return BadRequest();
 
             return _mapper.Map<ClientLogInResult>(client);
         }
 
         [HttpPatch("sign_in")]
-        public async Task<ClientLogInResult> SignInClient([FromBody] ClientSignInDto ClientSignIn)
+        public async Task<ActionResult<ClientLogInResult>> SignInClient([FromBody] ClientSignInDto ClientSignIn)
         {
             var clientData = _mapper.Map<ClientSignInData>(ClientSignIn);
             var client = await _clientService.SignIn(clientData);
 
             if (client == null)
-            {
-                throw new Exception(BadRequest().ToString());
-            }
+                return BadRequest("Неверный логин или пароль");
 
             return _mapper.Map<ClientLogInResult>(client);
         }
