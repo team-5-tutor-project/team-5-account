@@ -28,6 +28,7 @@ namespace TutorProject.Account.Web.Controllers.ClientController
         }
 
         [HttpPost("sign_up")]
+        [SwaggerOperation(Summary = "Зарегистрироваться как ученик")]
         public async Task<ActionResult<AuthorizationResponseDto>> SignUpClient([FromBody] ClientSignUpDto ClientSignUp)
         {
             var clientData = _mapper.Map<ClientSignUpData>(ClientSignUp);

@@ -28,6 +28,7 @@ namespace TutorProject.Account.Web.Controllers.TutorController
         }
 
         [HttpPost("sign_up")]
+        [SwaggerOperation(Summary = "Зарегистрироваться как репетитор")]
         public async Task<ActionResult<AuthorizationResponseDto>> SignUpClient([FromBody] TutorSignUpDto TutorSignUp)
         {
             var tutorData = _mapper.Map<TutorSignUpData>(TutorSignUp);
@@ -56,12 +57,23 @@ namespace TutorProject.Account.Web.Controllers.TutorController
             return _mapper.Map<TutorDto>((Tutor)user);
         }
         
-        [HttpPatch("{tutorId:guid}")]
+        [HttpPatch]
         [SwaggerOperation(Summary = "Изменить описание репетитора")]
-        public async Task ChangeDescription(Guid tutorId, [FromBody] ChangeDescriptionDto changeDescriptionDto)
+        public async Task<ActionResult> ChangeDescription(
+            [FromBody] ChangeDescriptionDto changeDescriptionDto, 
+            string authorizationToken)
         {
+            var checkResult = await _authorizationService.CheckRights(authorizationToken);
+            
+            if (!checkResult.IsSuccessful)
+                return BadRequest(checkResult.ErrorMessage);
+
+            if (checkResult.AuthorizedUser is not Tutor)
+                return BadRequest("Операция недоступна");
+            
             var changeDescriptionData = _mapper.Map<ChangeDescriptionData>(changeDescriptionDto);
-            await _tutorService.ChangeDescription(tutorId, changeDescriptionData);
+            await _tutorService.ChangeDescription(checkResult.AuthorizedUser.Id, changeDescriptionData);
+            return Ok();
         }
     }
 }

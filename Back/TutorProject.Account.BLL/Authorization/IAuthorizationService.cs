@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using TutorProject.Account.Common.Models;
 
 namespace TutorProject.Account.BLL.Authorization
@@ -12,5 +13,7 @@ namespace TutorProject.Account.BLL.Authorization
         Task<User> GetUserByToken(string tokenString);
 
         Task CancelAuthorization(string authorizationToken);
+
+        Task<RightsCheckResult> CheckRights(string authorizationToken, params Guid[] availableUserId);
     }
 }

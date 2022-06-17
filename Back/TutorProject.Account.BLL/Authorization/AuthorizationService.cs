@@ -56,6 +56,31 @@ namespace TutorProject.Account.BLL.Authorization
             await _tutorContext.SaveChangesAsync();
         }
 
+        public async Task<RightsCheckResult> CheckRights(string authorizationToken, params Guid[] availableUserId)
+        {
+            var user = await GetUserByToken(authorizationToken);
+
+            if (user is null)
+                return new RightsCheckResult
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "Для выполнения операции необходима авторизация"
+                };
+            
+            if (availableUserId.Length != 0 && !availableUserId.Contains(user.Id))
+                return new RightsCheckResult
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "Отказано в доступе"
+                };
+
+            return new RightsCheckResult
+            {
+                IsSuccessful = true,
+                AuthorizedUser = user
+            };
+        }
+
         private async Task<AuthorizationToken> GetActiveToken(User user)
         {
             return await _tutorContext.AuthorizationTokens
