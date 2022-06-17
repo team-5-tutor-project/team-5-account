@@ -37,6 +37,7 @@ namespace TutorProject.Account.Web
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
+                c.EnableAnnotations();
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TutorProject.Account.Web", Version = "v1" });
             });
         }

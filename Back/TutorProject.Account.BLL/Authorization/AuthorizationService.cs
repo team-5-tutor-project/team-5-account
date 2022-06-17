@@ -1,6 +1,7 @@
-﻿using System.Data.Entity;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TutorProject.Account.Common;
 using TutorProject.Account.Common.Models;
 
@@ -40,17 +41,31 @@ namespace TutorProject.Account.BLL.Authorization
             _tutorContext.AuthorizationTokens.Update(token);
             await _tutorContext.SaveChangesAsync();
         }
-
-        private Task<AuthorizationToken> GetActiveToken(User user)
+        
+        public async Task CancelAuthorization(string authorizationToken)
         {
-            return _tutorContext.AuthorizationTokens
-                .Where(token => token.Owner == user && token.Active)
+            var token = await _tutorContext.AuthorizationTokens
+                .Where(x => x.Token == authorizationToken)
                 .SingleOrDefaultAsync();
+            
+            if (token is null)
+                return;
+            
+            token.Canceled = true;
+            _tutorContext.AuthorizationTokens.Update(token);
+            await _tutorContext.SaveChangesAsync();
+        }
+
+        private async Task<AuthorizationToken> GetActiveToken(User user)
+        {
+            return await _tutorContext.AuthorizationTokens
+                .SingleOrDefaultAsync(token => token.Owner == user && token.ExpireAt < DateTime.Now && !token.Canceled);
         }
 
         public async Task<User> GetUserByToken(string tokenString)
         {
             var token = await _tutorContext.AuthorizationTokens
+                .Include(x => x.Owner)
                 .SingleOrDefaultAsync(x => x.Token == tokenString);
 
             if (token is null || !token.Active)

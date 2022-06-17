@@ -10,5 +10,7 @@ namespace TutorProject.Account.BLL.Authorization
         Task CancelAuthorization(User user);
 
         Task<User> GetUserByToken(string tokenString);
+
+        Task CancelAuthorization(string authorizationToken);
     }
 }

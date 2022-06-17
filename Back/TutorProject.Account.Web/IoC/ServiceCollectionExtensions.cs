@@ -1,9 +1,11 @@
 ﻿using System;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using TutorProject.Account.BLL.Authorization;
 using TutorProject.Account.BLL.Chats.Services;
 using TutorProject.Account.BLL.Clients.Services;
 using TutorProject.Account.BLL.Tutors.Services;
+using TutorProject.Account.BLL.Users;
 
 namespace TutorProject.Account.Web.IoC
 {
@@ -23,7 +25,9 @@ namespace TutorProject.Account.Web.IoC
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<ITutorService, TutorService>();
             services.AddScoped<IChatService, ChatService>();
-
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<IUserService, UserService>();
+            
             return services;
         }
     }

@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using TutorProject.Account.BLL.Authorization;
 using TutorProject.Account.BLL.Users;
 using TutorProject.Account.Web.Controllers.Authorization.Dto;
@@ -20,6 +22,7 @@ namespace TutorProject.Account.Web.Controllers.Authorization
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Авторизоваться по логину и паролю (получить токен)")]
         public async Task<ActionResult<AuthorizationResponseDto>> Authorize([FromBody] AuthorizationRequestDto dto)
         {
             var user = await _userService.Authenticate(dto.Login, dto.Password);
@@ -36,6 +39,7 @@ namespace TutorProject.Account.Web.Controllers.Authorization
         }
         
         [HttpGet]
+        [SwaggerOperation(Summary = "Получить ID и тип пользователя по токену авторизации")]
         public async Task<ActionResult<AuthorizedUserDto>> GetAuthorizedUser(string token)
         {
             var user = await _authorizationService.GetUserByToken(token);
@@ -48,6 +52,15 @@ namespace TutorProject.Account.Web.Controllers.Authorization
                 UserId = user.Id,
                 UserType = user.Discriminator
             };
+        }
+
+        [HttpDelete]
+        [SwaggerOperation(Summary = "Прервать авторизацию по токену")]
+        public async Task<ActionResult> CancelAuthorization(string token)
+        {
+            await _authorizationService.CancelAuthorization(token);
+
+            return Ok();
         }
     }
 }

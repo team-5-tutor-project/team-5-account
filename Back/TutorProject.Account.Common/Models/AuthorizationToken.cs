@@ -28,9 +28,7 @@ namespace TutorProject.Account.Common.Models
 
         private string GenerateToken()
         {
-            var randomInd = RandomNumberGenerator.GetInt32(0, 100000);
-            var time = DateTime.Now + TimeSpan.FromSeconds(randomInd);
-            return MD5.HashData(Encoding.UTF32.GetBytes(time.ToString())).ToString();
+            return Guid.NewGuid().ToString();
         }
     }
 }
