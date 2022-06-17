@@ -3,6 +3,7 @@
 @using TutorProject.Account.Front.Models
 @inject NavigationManager NavigationManager
 @inject HttpService _httpService
+@inject HttpClient _http
 
 <title>TutorService</title>
 <h1>Добро пожаловать в TutorService</h1>
@@ -11,7 +12,7 @@
     @switch (UserType)
     {
         case UserType.Client:
-            <a>Ученик</a>
+            <a>Клиент</a>
             break;
         case UserType.Tutor:
             <a>Репетитор</a>
@@ -49,18 +50,19 @@
 
     async Task OnLoginButtonClick()
     {
-        var loginRequest = new LoginRequestDto
+        var loginRequest = new AuthorizationRequestDto
         {
             Login = Username,
             Password = Password
         };
 
-        var loginUri = "api/" + (UserType == UserType.Client ? "clients" : "tutors") + "/sign_in";
-
-        var result = await _httpService.PatchWithBody<LoginResponseDto>(loginUri, loginRequest);
-        
-        if (result.IsSuccessful)
-            NavigationManager.NavigateTo("/Account");
+        var loginUri = "api/authorization";
+        var response = await _httpService.PostWithBody<LoginResponseDto>(loginUri, loginRequest);
+        if (response.IsSuccessful)
+        {
+            var token = response.Result.AuthorizationToken;
+            NavigationManager.NavigateTo($"/chats/{token}");
+        }
 
         LoginFailed = true;
     }

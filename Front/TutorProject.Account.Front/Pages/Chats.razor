@@ -1,5 +1,6 @@
-﻿@page "/chats"
+﻿@page "/chats/{token}"
 @using TutorProject.Account.Front.Models
+@using TutorProject.Account.Front.Dtos.Token
 @inject NavigationManager NavigationManager
 @inject HttpClient _http
 <PageTitle>Chats</PageTitle>
@@ -41,7 +42,7 @@ else
                     {
                         <tr>
                             <td>@chat.TutorName</td>
-                            <button class="btn btn-primary" @onclick="(() => TransferToChat(chat.ChatId))">Link</button>
+                            <a href="http://localhost:5067/chat/@CurrentUser.User.Id">...</a>
                         </tr>
                     }
                 }
@@ -50,32 +51,23 @@ else
 }
 
 @code {
+    [Parameter]
+    public string token{ get; set; }
+    private Guid UserId { get; set; }
+    private string UserType { get; set; }
     private List<Chat> _chats;
 
     private async Task GetChats()
     {
-        var response = await _http.GetAsync($"/api/chats/clients/{CurrentUser.User.Id}/chats");
+        var response = await _http.GetAsync($"/api/chats/clients/{UserId}/chats");
         _chats = response.Content.ReadFromJsonAsync<List<Chat>>().Result;
-        
-        // to test
-        /*_chats = new List<Chat>()
-        {
-            new Chat(new Guid(), "Ilya", "Misha"),
-            new Chat(new Guid(), "Ilya2", "Misha"),
-            new Chat(new Guid(), "Ilya3", "Misha"),
-            new Chat(new Guid(), "Ilya4", "Misha")
-        };*/
-    }
-
-    private async void TransferToChat(Guid ChatID)
-    {
-        var response = await _http.GetAsync($"{ChatID}/getlink");
-        string link = response.Content.ReadFromJsonAsync<string>().Result;
-        NavigationManager.NavigateTo(link);
     }
     
     protected override async Task OnInitializedAsync()
     {
+        var response = await _http.GetAsync($"/api/authorization/{token}");
+        UserId = response.Content.ReadFromJsonAsync<TokenResponseDto>().Result.UserId;
+        UserType = response.Content.ReadFromJsonAsync<TokenResponseDto>().Result.UserType;
         await GetChats();
     }
 
