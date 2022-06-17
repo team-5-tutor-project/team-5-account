@@ -2,10 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TutorProject.Account.BLL.Clients.Data;
-using TutorProject.Account.BLL.Clients.Result;
 using TutorProject.Account.Common;
 using TutorProject.Account.Common.Models;
-using TutorProject.Account.Web.Controllers.ClientController.Data;
 
 namespace TutorProject.Account.BLL.Clients.Services
 {
@@ -39,12 +37,6 @@ namespace TutorProject.Account.BLL.Clients.Services
             await _context.SaveChangesAsync();
 
             return client;
-        }
-
-        public Task<Client> SignIn(ClientSignInData clientData)
-        {
-            return _context.Clients.SingleOrDefaultAsync(client => client.Login == clientData.Login &&
-                                                                   client.Password == clientData.Password);
         }
     }
 }

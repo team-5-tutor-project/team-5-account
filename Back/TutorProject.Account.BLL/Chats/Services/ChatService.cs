@@ -31,18 +31,22 @@ namespace TutorProject.Account.BLL.Chats.Services
             return chats;
         }
 
-        public async Task<List<Chat>> GetChatsForTutor(Guid tutorID)
+        public async Task<List<Chat>> GetChatsByUserId(Guid userId)
         {
-            Tutor tutor = await _tutorContext.Tutors.SingleOrDefaultAsync(x => x.Id == tutorID);
-
-            var chats = await _tutorContext.Chats.Where(x => x.Tutor == tutor).ToListAsync();
+            var chats = await _tutorContext.Chats
+                .Where(x => x.Tutor.Id == userId || x.Client.Id == userId)
+                .ToListAsync();
             
             return chats;
         }
 
         public async Task<Chat> GetChatByID(Guid chatID)
         {
-            Chat chat = await _tutorContext.Chats.SingleOrDefaultAsync(x => x.ChatId == chatID);
+            Chat chat = await _tutorContext.Chats
+                .Include(chat => chat.Tutor)
+                .Include(chat => chat.Client)
+                .SingleOrDefaultAsync(x => x.ChatId == chatID);
+
             return chat;
         }
 

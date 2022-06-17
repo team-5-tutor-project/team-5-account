@@ -1,4 +1,4 @@
-﻿namespace TutorProject.Account.Web.Controllers.TutorController.Data
+﻿namespace TutorProject.Account.BLL.Tutors.Data
 {
     public class TutorSignUpData
     {

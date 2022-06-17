@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TutorProject.Account.Common.Models
+﻿namespace TutorProject.Account.Common.Models
 {
     public class Tutor : User
     {

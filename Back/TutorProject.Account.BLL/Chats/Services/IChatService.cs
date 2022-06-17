@@ -8,8 +8,7 @@ namespace TutorProject.Account.BLL.Chats.Services
 {
     public interface IChatService
     {
-        Task<List<Chat>> GetChatsForClient(Guid clientID);
-        Task<List<Chat>> GetChatsForTutor(Guid tutorID);
+        Task<List<Chat>> GetChatsByUserId(Guid userId);
         Task<Chat> GetChatByID(Guid chatID);
         Task CreateChat(CreateChatData createChatData);
     }

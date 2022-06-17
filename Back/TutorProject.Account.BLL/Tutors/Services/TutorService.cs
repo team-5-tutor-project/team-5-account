@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TutorProject.Account.BLL.Tutors.Data;
-using TutorProject.Account.BLL.Tutors.Result;
 using TutorProject.Account.BLL.Utils;
 using TutorProject.Account.Common;
 using TutorProject.Account.Common.Models;
-using TutorProject.Account.Web.Controllers.TutorController.Data;
 
 namespace TutorProject.Account.BLL.Tutors.Services
 {
@@ -41,12 +38,6 @@ namespace TutorProject.Account.BLL.Tutors.Services
             await _context.SaveChangesAsync();
 
             return tutor;
-        }
-
-        public Task<Tutor> SignIn(TutorSignInData tutorData)
-        {
-            return _context.Tutors.SingleOrDefaultAsync(tutor => tutor.Login == tutorData.Login && 
-                                                              tutor.Password == tutorData.Password);
         }
 
         public async Task ChangeDescription(Guid tutorId, ChangeDescriptionData data)

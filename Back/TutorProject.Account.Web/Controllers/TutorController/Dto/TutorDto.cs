@@ -1,12 +1,16 @@
 ﻿using TutorProject.Account.Common.Models;
 
-namespace TutorProject.Account.BLL.Tutors.Result
+namespace TutorProject.Account.Web.Controllers.TutorController.Dto
 {
-    public class TutorLogInResult
+    public class TutorDto
     {
         public string Name { get; set; }
         
+        public string Login { get; set; }
+        
         public WorkFormat WorkFormat { get; set; }
+        
+        public string Description { get; set; }
         
         public int PricePerHour { get; set; }
         
