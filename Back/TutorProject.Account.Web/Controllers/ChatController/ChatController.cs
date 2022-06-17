@@ -5,7 +5,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TutorProject.Account.BLL.Chats.Data;
 using TutorProject.Account.BLL.Chats.Services;
-using TutorProject.Account.Common.Models;
 using TutorProject.Account.Web.Controllers.ChatController.Dto;
 
 namespace TutorProject.Account.Web.Controllers.ChatController

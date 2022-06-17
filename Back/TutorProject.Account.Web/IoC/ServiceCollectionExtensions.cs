@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using TutorProject.Account.BLL.Chats.Services;
 using TutorProject.Account.BLL.Clients.Services;
 using TutorProject.Account.BLL.Tutors.Services;
-using TutorProject.Account.Common;
 
 namespace TutorProject.Account.Web.IoC
 {

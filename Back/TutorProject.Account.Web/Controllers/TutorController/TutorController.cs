@@ -2,12 +2,10 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using TutorProject.Account.BLL.Authorization;
 using TutorProject.Account.BLL.Tutors.Data;
-using TutorProject.Account.BLL.Tutors.Result;
 using TutorProject.Account.BLL.Tutors.Services;
-using TutorProject.Account.Common;
-using TutorProject.Account.Common.Models;
-using TutorProject.Account.Web.Controllers.TutorController.Data;
+using TutorProject.Account.Web.Controllers.Authorization.Dto;
 using TutorProject.Account.Web.Controllers.TutorController.Dto;
 
 namespace TutorProject.Account.Web.Controllers.TutorController
@@ -18,15 +16,17 @@ namespace TutorProject.Account.Web.Controllers.TutorController
     {
         private readonly ITutorService _tutorService;
         private readonly IMapper _mapper;
-        
-        public TutorController(ITutorService tutorService, IMapper mapper)
+        private readonly IAuthorizationService _authorizationService;
+
+        public TutorController(ITutorService tutorService, IMapper mapper, IAuthorizationService authorizationService)
         {
             _tutorService = tutorService;
             _mapper = mapper;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("sign_up")]
-        public async Task<ActionResult<TutorLogInResult>> SignUpTutor([FromBody] TutorSignUpDto TutorSignUp)
+        public async Task<ActionResult<AuthorizationResponseDto>> SignUpClient([FromBody] TutorSignUpDto TutorSignUp)
         {
             var tutorData = _mapper.Map<TutorSignUpData>(TutorSignUp);
             var tutor = await _tutorService.SignUp(tutorData);
@@ -34,19 +34,12 @@ namespace TutorProject.Account.Web.Controllers.TutorController
             if (tutor == null)
                 return BadRequest();
 
-            return _mapper.Map<TutorLogInResult>(tutor);
-        }
+            var authorizationToken = await _authorizationService.Authorize(tutor);
 
-        [HttpPatch("sign_in")]
-        public async Task<ActionResult<TutorLogInResult>> SignInTutor([FromBody] TutorSignInDto TutorSignIn)
-        {
-            var tutorData = _mapper.Map<TutorSignInData>(TutorSignIn);
-            var tutor = await _tutorService.SignIn(tutorData);
-
-            if (tutor == null)
-                return BadRequest("Неверный логин или пароль");
-
-            return _mapper.Map<TutorLogInResult>(tutor);
+            return new AuthorizationResponseDto
+            {
+                AuthorizationToken = authorizationToken.Token
+            };
         }
 
         [HttpPatch("{tutorId:guid}")]

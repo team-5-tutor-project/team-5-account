@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+Actor Client
+Client -> AccountFront: Авторизоваться
+AccountFront -> AccountBack : Авторизоваться\n(Login, Password)
+AccountFront <-- AccountBack : SessionToken
+Client -> AccountFront: В чаты
+AccountFront -> SearcherFront : Redirect\n(SessionToken)
+AccountBack <- SearcherFront : Получить юзера\n(Token)
+AccountBack --> SearcherFront : User
+Client -> SearcherFront: Найти туторов
+Client -> SearcherFront : Начать чат
+SearcherFront -> MessengerBack : Получить чат\n(Token,ClientId, TutorId)
+MessengerBack -> MessengerDataBase : Есть ли чат?
+MessengerBack -> MessengerDataBase : Нет: AddChat
+MessengerBack -> MessengerDataBase : Да: GetChat
+MessengerBack <-- MessengerDataBase : ChatId
+SearcherFront <-- MessengerBack : ChatId
+SearcherFront -> AccountBack : Добавить чат\n(ClientId, TutorId, ChatId)
+SearcherFront -> MessengerFront : Redirect\n(Token)
+
+@enduml
