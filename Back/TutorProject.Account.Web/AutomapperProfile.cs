@@ -17,6 +17,8 @@ namespace TutorProject.Account.Web
             CreateMap<TutorSignUpDto, TutorSignUpData>();
             CreateMap<ChangeDescriptionDto, ChangeDescriptionData>();
             CreateMap<CreateChatDTO, CreateChatData>();
+            CreateMap<Tutor, TutorDto>();
+            CreateMap<Client, ClientDto>();
             CreateMap<Chat, ChatDto>()
                 .ForMember(dto => dto.TutorName, opt => opt.MapFrom(chat => chat.Tutor.Name))
                 .ForMember(dto => dto.ClientName, opt => opt.MapFrom(chat => chat.Client.Name));
