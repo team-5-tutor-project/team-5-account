@@ -62,9 +62,11 @@
         var registrationUri = "api/" + (UserType == UserType.Client ? "clients" : "tutors") + "/sign_up";
 
         var result = await _httpService.PostWithBody<RegistrationRequestDto>(registrationUri, registrationRequest);
-        
+
         if (result.IsSuccessful)
-            NavigationManager.NavigateTo("/Account");
+        {
+            NavigationManager.NavigateTo("/Login");
+        }
 
         RegistrationFailed = true;
     }

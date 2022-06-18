@@ -1,5 +1,6 @@
 ﻿@page "/Login"
 @using TutorProject.Account.Front.Dtos
+@using TutorProject.Account.Front.Dtos.Token
 @using TutorProject.Account.Front.Models
 @inject NavigationManager NavigationManager
 @inject HttpService _httpService
@@ -61,7 +62,12 @@
         if (response.IsSuccessful)
         {
             var token = response.Result.AuthorizationToken;
-            NavigationManager.NavigateTo($"/chats/{token}");
+            MainController.IsAuthorized = true;
+            var user = await _http.GetAsync($"/api/authorization?token={token}");
+            MainController.Token = token;
+            var responseDto = await user.Content.ReadFromJsonAsync<TokenResponseDto>();
+            MainController.User = responseDto.UserType;
+            NavigationManager.NavigateTo($"/");
         }
 
         LoginFailed = true;

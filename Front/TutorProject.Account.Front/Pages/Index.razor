@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 <PageTitle>Index</PageTitle>
 
-@if (!CurrentUser.IsAuthorized)
+@if (!MainController.IsAuthorized)
 {
     NavigationManager.NavigateTo("/Login");
 }
