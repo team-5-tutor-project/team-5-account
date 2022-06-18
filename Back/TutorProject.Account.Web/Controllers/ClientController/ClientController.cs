@@ -47,9 +47,9 @@ namespace TutorProject.Account.Web.Controllers.ClientController
         
         [HttpGet]
         [SwaggerOperation(Summary = "Получить ученика по токену")]
-        public async Task<ActionResult<ClientDto>> GetByToken(string authorizationToken)
+        public async Task<ActionResult<ClientDto>> GetByToken(string token)
         {
-            var user = await _authorizationService.GetUserByToken(authorizationToken);
+            var user = await _authorizationService.GetUserByToken(token);
             
             if (user is null or not Client)
                 return BadRequest("Не найден ученик с указанным токеном авторизации");

@@ -27,9 +27,9 @@ namespace TutorProject.Account.Web.Controllers.ChatController
         
         [HttpPost]
         [SwaggerOperation(Summary = "Создать чат")]
-        public async Task<ActionResult> CreateChat([FromBody] CreateChatDTO createChatDto, string authorizationToken)
+        public async Task<ActionResult> CreateChat([FromBody] CreateChatDTO createChatDto, string token)
         {
-            var checkResult = await _authorizationService.CheckRights(authorizationToken, createChatDto.ClientID, createChatDto.TutorID);
+            var checkResult = await _authorizationService.CheckRights(token, createChatDto.ClientID, createChatDto.TutorID);
 
             if (!checkResult.IsSuccessful)
                 return BadRequest(checkResult.ErrorMessage);
@@ -42,9 +42,9 @@ namespace TutorProject.Account.Web.Controllers.ChatController
 
         [HttpGet]
         [SwaggerOperation(Summary = "Получить список чатов для пользователя по токену авторизации")]
-        public async Task<ActionResult<List<ChatDto>>> FindChatsByToken(string authorizationToken)
+        public async Task<ActionResult<List<ChatDto>>> FindChatsByToken(string token)
         {
-            var checkResult = await _authorizationService.CheckRights(authorizationToken);
+            var checkResult = await _authorizationService.CheckRights(token);
 
             if (!checkResult.IsSuccessful)
                 return BadRequest(checkResult.ErrorMessage);
@@ -55,11 +55,11 @@ namespace TutorProject.Account.Web.Controllers.ChatController
 
         [HttpGet("{chatID}")]
         [SwaggerOperation(Summary = "Получить чат по ID")]
-        public async Task<ActionResult<ChatDto>> FindChatByID([FromRoute] Guid chatID, string authorizationToken)
+        public async Task<ActionResult<ChatDto>> FindChatByID([FromRoute] Guid chatID, string token)
         {
             var chat = await _chatService.GetChatByID(chatID);
             
-            var checkResult = await _authorizationService.CheckRights(authorizationToken, chat.Client.Id, chat.Tutor.Id);
+            var checkResult = await _authorizationService.CheckRights(token, chat.Client.Id, chat.Tutor.Id);
             if (!checkResult.IsSuccessful)
                 return BadRequest(checkResult.ErrorMessage);
             

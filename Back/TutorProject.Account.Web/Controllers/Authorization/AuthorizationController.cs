@@ -38,7 +38,7 @@ namespace TutorProject.Account.Web.Controllers.Authorization
             };
         }
         
-        [HttpGet("/{token}")]
+        [HttpGet]
         [SwaggerOperation(Summary = "Получить ID и тип пользователя по токену авторизации")]
         public async Task<ActionResult<AuthorizedUserDto>> GetAuthorizedUser(string token)
         {
