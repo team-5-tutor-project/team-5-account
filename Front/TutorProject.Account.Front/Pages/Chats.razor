@@ -1,15 +1,16 @@
-﻿@page "/chats"
+﻿@page "/chats/{token}"
 @using TutorProject.Account.Front.Models
+@using TutorProject.Account.Front.Dtos.Token
 @inject NavigationManager NavigationManager
 @inject HttpClient _http
 <PageTitle>Chats</PageTitle>
 
-<h1>Chats</h1>
-
-@if (!CurrentUser.IsAuthorized)
+@if (!MainController.IsAuthorized)
 {
     NavigationManager.NavigateTo("/Login");
 }
+
+<h1>Chats</h1>
 
 @if (_chats == null)
 {
@@ -25,7 +26,7 @@ else
             </tr>
         </thead>
         <tbody>
-        @if (CurrentUser.User is Tutor)
+        @if (MainController.User == "Tutor")
         {
             @foreach (var chat in _chats)
             {
@@ -35,13 +36,13 @@ else
                 </tr>
             }
         }
-        @if (CurrentUser.User is Client)
+        @if (MainController.User == "Client")
                 {
                     @foreach (var chat in _chats)
                     {
                         <tr>
                             <td>@chat.TutorName</td>
-                            <button class="btn btn-primary" @onclick="(() => TransferToChat(chat.ChatId))">Link</button>
+                            <a href="http://localhost:5067/chat/@UserId">...</a>
                         </tr>
                     }
                 }
@@ -50,32 +51,40 @@ else
 }
 
 @code {
-    private List<Chat> _chats;
+    [Parameter]
+    public string token { get; set; }
+    
+    private Guid? UserId { get; set; }
+    private string? UserType { get; set; }
+    private List<Chat>? _chats;
 
     private async Task GetChats()
     {
-        var response = await _http.GetAsync($"/api/chats/clients/{CurrentUser.User.Id}/chats");
-        _chats = response.Content.ReadFromJsonAsync<List<Chat>>().Result;
-        
-        // to test
-        /*_chats = new List<Chat>()
-        {
-            new Chat(new Guid(), "Ilya", "Misha"),
-            new Chat(new Guid(), "Ilya2", "Misha"),
-            new Chat(new Guid(), "Ilya3", "Misha"),
-            new Chat(new Guid(), "Ilya4", "Misha")
-        };*/
+        var response = await _http.GetAsync($"/api/chats?token={token}");
+        _chats = await response.Content.ReadFromJsonAsync<List<Chat>>();
     }
 
-    private async void TransferToChat(Guid ChatID)
+    private async Task<bool> Authorize()
     {
-        var response = await _http.GetAsync($"{ChatID}/getlink");
-        string link = response.Content.ReadFromJsonAsync<string>().Result;
-        NavigationManager.NavigateTo(link);
+        var response = await _http.GetAsync($"/api/authorization?token={token}");
+        
+        if (!response.IsSuccessStatusCode)
+            return true;
+        
+        var responseDto = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
+        UserId = responseDto?.UserId;
+        UserType = responseDto?.UserType;
+
+        return false;
     }
     
     protected override async Task OnInitializedAsync()
     {
+        var authorizationFailed = await Authorize();
+        
+        if (authorizationFailed)
+            NavigationManager.NavigateTo("/Login");
+        
         await GetChats();
     }
 

@@ -47,9 +47,9 @@ namespace TutorProject.Account.Web.Controllers.TutorController
         
         [HttpGet]
         [SwaggerOperation(Summary = "Получить репетитора по токену")]
-        public async Task<ActionResult<TutorDto>> GetByToken(string authorizationToken)
+        public async Task<ActionResult<TutorDto>> GetByToken(string token)
         {
-            var user = await _authorizationService.GetUserByToken(authorizationToken);
+            var user = await _authorizationService.GetUserByToken(token);
             
             if (user is null or not Tutor)
                 return BadRequest("Не найден репетитор с указанным токеном авторизации");
@@ -61,9 +61,9 @@ namespace TutorProject.Account.Web.Controllers.TutorController
         [SwaggerOperation(Summary = "Изменить описание репетитора")]
         public async Task<ActionResult> ChangeDescription(
             [FromBody] ChangeDescriptionDto changeDescriptionDto, 
-            string authorizationToken)
+            string token)
         {
-            var checkResult = await _authorizationService.CheckRights(authorizationToken);
+            var checkResult = await _authorizationService.CheckRights(token);
             
             if (!checkResult.IsSuccessful)
                 return BadRequest(checkResult.ErrorMessage);

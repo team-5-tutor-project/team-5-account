@@ -1,6 +1,6 @@
 ﻿namespace TutorProject.Account.Front.Dtos;
 
-public class LoginRequestDto
+public class AuthorizationRequestDto
 {
     public string Login { get; set; }
     
