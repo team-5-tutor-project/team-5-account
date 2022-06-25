@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TutorProject.Account.BLL.Tutors.Data;
@@ -34,6 +35,14 @@ namespace TutorProject.Account.BLL.Tutors.Services
                 Password = tutorData.Password
             };
             
+            var schedule = new Schedule()
+            {
+                Id = Guid.NewGuid(),
+                Tutor = tutor,
+                FreeTimeSchedule = new List<Day>(),
+            };
+
+            await _context.Schedules.AddAsync(schedule);
             await _context.Tutors.AddAsync(tutor);
             await _context.SaveChangesAsync();
 
