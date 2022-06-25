@@ -52,6 +52,11 @@ namespace TutorProject.Account.BLL.Tutors.Services
                 FreeTimeSchedule = new List<Day>(),
             };
 
+            for (int i = 0; i < 7; i++)
+            {
+                schedule.FreeTimeSchedule.Add(new Day());
+            }
+
             _context.Schedules.Add(schedule);
             _context.Tutors.Add(tutor);
             _context.TutorToSubjects.Add(tutorToSubject);
