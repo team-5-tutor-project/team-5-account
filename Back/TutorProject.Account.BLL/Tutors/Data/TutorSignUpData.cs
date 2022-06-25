@@ -7,5 +7,7 @@
         public string Login { get; set; }
         
         public string Password { get; set; }
+        
+        public string Subject { get; set; }
     }
 }
