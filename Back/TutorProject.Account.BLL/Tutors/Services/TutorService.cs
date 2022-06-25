@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TutorProject.Account.BLL.Subjects;
@@ -44,8 +45,15 @@ namespace TutorProject.Account.BLL.Tutors.Services
                 Subject = await _subjectService.GetOrAdd(tutorData.Subject)
             };
             
-            _context.Tutors.Add(tutor);
-            _context.TutorToSubjects.Add(tutorToSubject);
+            var schedule = new Schedule()
+            {
+                Id = Guid.NewGuid(),
+                Tutor = tutor,
+                FreeTimeSchedule = new List<Day>(),
+            };
+
+            await _context.Schedules.AddAsync(schedule);
+            await _context.Tutors.AddAsync(tutor);
             await _context.SaveChangesAsync();
 
             return tutor;

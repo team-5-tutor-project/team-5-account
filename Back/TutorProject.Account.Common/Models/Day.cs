@@ -15,6 +15,6 @@ namespace TutorProject.Account.Common.Models
         
         public Guid Id { get; init; }
 
-        public List<bool> DaySchedule { get; init; } = new List<bool>();
+        public List<bool> DaySchedule { get; set; } = new List<bool>();
     }
 }

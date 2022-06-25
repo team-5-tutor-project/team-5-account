@@ -9,6 +9,6 @@ namespace TutorProject.Account.Common.Models
         
         public Tutor Tutor { get; init; }
 
-        public List<Day> FreeTimeSchedule { get; init; } = new List<Day>();
+        public List<Day> FreeTimeSchedule { get; set; } = new List<Day>();
     }
 }
