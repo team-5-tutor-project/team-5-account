@@ -52,8 +52,10 @@ namespace TutorProject.Account.BLL.Tutors.Services
                 FreeTimeSchedule = new List<Day>(),
             };
 
-            await _context.Schedules.AddAsync(schedule);
-            await _context.Tutors.AddAsync(tutor);
+            _context.Schedules.Add(schedule);
+            _context.Tutors.Add(tutor);
+            _context.TutorToSubjects.Add(tutorToSubject);
+            
             await _context.SaveChangesAsync();
 
             return tutor;
