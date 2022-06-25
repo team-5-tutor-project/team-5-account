@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TutorProject.Account.BLL.Subjects;
 using TutorProject.Account.BLL.Tutors.Data;
 using TutorProject.Account.BLL.Utils;
 using TutorProject.Account.Common;
@@ -12,10 +13,12 @@ namespace TutorProject.Account.BLL.Tutors.Services
     public class TutorService : ITutorService
     {
         private readonly TutorContext _context;
+        private readonly ISubjectService _subjectService;
 
-        public TutorService(TutorContext context)
+        public TutorService(TutorContext context, ISubjectService subjectService)
         {
             _context = context;
+            _subjectService = subjectService;
         }
 
         public async Task<Tutor> SignUp(TutorSignUpData tutorData)
@@ -27,12 +30,19 @@ namespace TutorProject.Account.BLL.Tutors.Services
                 return null;
             }
             
-            var tutor = new Tutor()
+            var tutor = new Tutor
             {
                 Id = Guid.NewGuid(),
                 Login = tutorData.Login,
                 Name = tutorData.Name,
                 Password = tutorData.Password
+            };
+
+            var tutorToSubject = new TutorToSubject
+            {
+                Id = Guid.NewGuid(),
+                Tutor = tutor,
+                Subject = await _subjectService.GetOrAdd(tutorData.Subject)
             };
             
             var schedule = new Schedule()

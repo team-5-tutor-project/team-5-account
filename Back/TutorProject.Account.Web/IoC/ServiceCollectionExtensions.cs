@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TutorProject.Account.BLL.Authorization;
 using TutorProject.Account.BLL.Chats.Services;
 using TutorProject.Account.BLL.Clients.Services;
+using TutorProject.Account.BLL.Subjects;
 using TutorProject.Account.BLL.Tutors.Services;
 using TutorProject.Account.BLL.Users;
 
@@ -27,6 +28,7 @@ namespace TutorProject.Account.Web.IoC
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISubjectService, SubjectService>();
             
             return services;
         }
