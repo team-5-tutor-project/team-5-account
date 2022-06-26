@@ -9,5 +9,7 @@ namespace TutorProject.Account.BLL.Tutors.Services
     {
         Task<Tutor> SignUp(TutorSignUpData tutorData);
         Task ChangeDescription(Guid tutorId, ChangeDescriptionData data);
+        
+        Task<string> GetName(Guid ClientID);
     }
 }

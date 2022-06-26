@@ -16,6 +16,12 @@ namespace TutorProject.Account.BLL.Clients.Services
             _context = context;
         }
 
+        public async Task<string> GetName(Guid clientID)
+        {
+            var client = await _context.Clients.SingleOrDefaultAsync(client => client.Id == clientID);
+            return client?.Name;
+        }
+
         public async Task<Client> SignUp(ClientSignUpData clientData)
         {
             var isExists = await _context.Clients.AnyAsync(client => client.Login == clientData.Login);

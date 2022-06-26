@@ -75,5 +75,22 @@ namespace TutorProject.Account.Web.Controllers.TutorController
             await _tutorService.ChangeDescription(checkResult.AuthorizedUser.Id, changeDescriptionData);
             return Ok();
         }
+        
+        [HttpGet("{tutorID}/name")]
+        [SwaggerOperation(Summary = "Получить имя репетитора по ID")]
+        public async Task<ActionResult<TutorNameDto>> GetTutorName([FromRoute]Guid tutorID)
+        {
+            var name = await _tutorService.GetName(tutorID);
+            
+            if (name is null)
+                return BadRequest("Не найдено имя репетитора");
+
+            TutorNameDto tutorNameDto = new TutorNameDto()
+            {
+                Name = name
+            };
+
+            return tutorNameDto;
+        }
     }
 }
