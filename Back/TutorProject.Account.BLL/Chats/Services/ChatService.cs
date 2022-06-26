@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TutorProject.Account.BLL.Chats.Data;
+using TutorProject.Account.BLL.Utils;
 using TutorProject.Account.Common;
 using TutorProject.Account.Common.Models;
 
@@ -54,7 +55,14 @@ namespace TutorProject.Account.BLL.Chats.Services
         {
             Client client = await _tutorContext.Clients.SingleOrDefaultAsync(x => x.Id == createChatData.ClientID);
             Tutor tutor = await _tutorContext.Tutors.SingleOrDefaultAsync(x => x.Id == createChatData.TutorID);
-            Chat chat = new Chat() {ChatId = createChatData.ChatID, Client = client, Tutor = tutor};
+
+            if (client is null)
+                throw new BusinessLogicException("Не существует клиента с данным ID");
+            
+            if (tutor is null)
+                throw new BusinessLogicException("Не существует репетитора с данным ID");
+            
+            Chat chat = new Chat {ChatId = createChatData.ChatID, Client = client, Tutor = tutor};
             await _tutorContext.Chats.AddAsync(chat);
             await _tutorContext.SaveChangesAsync();
         }
