@@ -1,17 +1,13 @@
-﻿@page "/account/{token}"
+﻿@page "/account"
 @using TutorProject.Account.Front.Models
-@using TutorProject.Account.Front.Dtos.Token
-@using TutorProject.Account.Common.Models
+@using TutorProject.Account.Front.Services
 @inject NavigationManager NavigationManager
-@inject HttpClient _http
+@inject HttpService _HttpService
+@inject AuthorizationService _authorizationService;
+
 <PageTitle>Личный кабинет</PageTitle>
 
 <h1>Личный кабинет</h1>
-
-@if (!MainController.IsAuthorized)
-{
-    NavigationManager.NavigateTo("/Login");
-}
 
 @if (Name == null)
 {
@@ -19,16 +15,17 @@
 }
 else
 {
+    <button class="btn" onclick="@LogOut">Выйти</button>
     <table class='table'>
         <tbody>
         <tr>
             <td>Имя</td>
             <td>@Name</td>
         </tr>
-        @if (MainController.User == "Client")
+        @if (_authData.UserType == "Client")
         {
         }
-        @if (MainController.User == "Tutor")
+        @if (_authData.UserType == "Tutor")
         {
             <tr>
                 <td>Цена за час занятия:</td>
@@ -52,23 +49,19 @@ else
 }
 
 @code {
-    [Parameter]
-    public string token { get; set; }
-    
-    private Guid? UserId { get; set; }
-    private string? UserType { get; set; }
-    
     private string? Name { get; set; }
     private string? Price { get; set; }
     private string? IntervalClass { get; set; }
     private string? WorkFormat { get; set; }
     private string? Description { get; set; }
 
+    private AuthorizationData _authData;
+
     private async Task GetTutor()
     {
-        var response = await _http.GetAsync($"/api/tutors?token={token}");
-        var user = await response.Content.ReadFromJsonAsync<Tutor>();
-        
+        var response = await _HttpService.GetAsync<Tutor>($"/api/tutors?token={_authData.Token}");
+
+        var user = response.ResponseDto;
         Name = user?.Name;
         Description = user?.Description ?? "пусто";
         Price = user?.PricePerHour == null ? Convert.ToString(user?.PricePerHour) : "пусто";
@@ -86,33 +79,25 @@ else
     
     private async Task GetClient()
     {
-        var response = await _http.GetAsync($"/api/clients?token={token}");
-        var user = await response.Content.ReadFromJsonAsync<Client>();
-        Name = user?.Name;
+        var result = await _HttpService.GetAsync<Client>($"/api/clients?token={_authData.Token}");
+        Name = result.ResponseDto.Name;
     }
 
-    private async Task<bool> Authorize()
+    private async Task LogOut()
     {
-        var response = await _http.GetAsync($"/api/authorization?token={token}");
-        
-        if (!response.IsSuccessStatusCode)
-            return true;
-        
-        var responseDto = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
-        UserId = responseDto?.UserId;
-        UserType = responseDto?.UserType;
-
-        return false;
+        await _authorizationService.CancelAuthorization();
+        NavigationManager.NavigateTo("Login");
     }
-    
+
     protected override async Task OnInitializedAsync()
     {
-        var authorizationFailed = await Authorize();
-        
-        if (authorizationFailed)
-            NavigationManager.NavigateTo("/Login");
+        var authData = await _authorizationService.GetAuthData();
+        if (authData is null)
+            NavigationManager.NavigateTo("Login");
 
-        if (MainController.User == "Client")
+        _authData = authData!;
+        
+        if (authData!.UserType == "Client")
             await GetClient();
         else
             await GetTutor();

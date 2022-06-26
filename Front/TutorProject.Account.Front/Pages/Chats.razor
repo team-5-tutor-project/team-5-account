@@ -1,13 +1,10 @@
 ﻿@page "/chats"
 @using TutorProject.Account.Front.Models
+@using TutorProject.Account.Front.Services
 @inject NavigationManager NavigationManager
 @inject HttpService _httpService
+@inject AuthorizationService _authorizationService
 <PageTitle>Chats</PageTitle>
-
-@if (!MainController.IsAuthorized)
-{
-    NavigationManager.NavigateTo("/Login");
-}
 
 <h1>Chats</h1>
 
@@ -25,7 +22,7 @@ else
             </tr>
         </thead>
         <tbody>
-        @if (MainController.UserType == "Tutor")
+        @if (_authData.UserType == "Tutor")
         {
             @foreach (var chat in _chats)
             {
@@ -35,13 +32,13 @@ else
                 </tr>
             }
         }
-        @if (MainController.UserType == "Client")
+        @if (_authData.UserType == "Client")
                 {
                     @foreach (var chat in _chats)
                     {
                         <tr>
                             <td>@chat.TutorName</td>
-                            <a href="http://localhost:9000/chat/@chat.ChatId/@MainController.Token">link to chat</a>
+                            <a href="http://localhost:9000/chat/@chat.ChatId/@_authData.Token">link to chat</a>
                         </tr>
                     }
                 }
@@ -51,18 +48,21 @@ else
 
 @code {
     private List<Chat>? _chats;
+    private AuthorizationData _authData;
 
     private async Task GetChats()
     {
-        var result = await _httpService.GetAsync<List<Chat>>($"/api/chats?token={MainController.Token}");
+        var result = await _httpService.GetAsync<List<Chat>>($"/api/chats?token={_authData.Token}");
         _chats = result.ResponseDto;
     }
 
     protected override async Task OnInitializedAsync()
     {
-        if (!MainController.IsAuthorized)
-            NavigationManager.NavigateTo("/Login");
-        
+        var authData = await _authorizationService.GetAuthData();
+        if (authData is null)
+            NavigationManager.NavigateTo("Login");
+
+        _authData = authData!;
         await GetChats();
     }
 }

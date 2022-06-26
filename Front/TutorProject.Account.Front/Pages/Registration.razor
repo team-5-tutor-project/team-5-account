@@ -1,7 +1,9 @@
 ﻿@page "/Registration"
 @using TutorProject.Account.Front.Models
 @using TutorProject.Account.Front.Dtos.Registation
+@using TutorProject.Account.Front.Services
 @inject HttpService _httpService
+@inject AuthorizationService _authorizationService
 @inject NavigationManager NavigationManager
 
 <h1>Регистрация в TutorService</h1>
@@ -103,8 +105,8 @@
 
         if (result.IsSuccessful)
         {
-            await MainController.Authorize(_httpService, result.ResponseDto!.AuthorizationToken);
-            NavigationManager.NavigateTo($"/");
+            await _authorizationService.AuthorizeAsync(result.ResponseDto!.AuthorizationToken);
+            NavigationManager.NavigateTo($"Account");
         }
 
         RegistrationFailed = true;
