@@ -1,8 +1,8 @@
 ﻿namespace TutorProject.Account.Front.Models;
 
-public class RequestResult<TRequestDto>
+public class RequestResult<TResponseDto>
 {
     public bool IsSuccessful { get; set; }
     
-    public TRequestDto Result { get; set; }
+    public TResponseDto ResponseDto { get; set; }
 }
