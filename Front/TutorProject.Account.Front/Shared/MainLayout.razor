@@ -3,18 +3,14 @@
 @inject AuthorizationService _authorizationService
 
 <div class="page">
-    @if (_isAuthorized)
+    @*@if (_isAuthorized)
     {
         <div class="sidebar">
             <NavMenu/>
         </div>
-    }
+    }*@
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
         <article class="content px-4">
             @Body
         </article>

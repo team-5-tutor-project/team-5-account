@@ -54,7 +54,7 @@ public class AuthorizationService
         var result = await _httpService.GetAsync<TokenResponseDto>($"/api/authorization?token={token}");
         
         if (!result.IsSuccessful)
-            throw new InvalidOperationException("Некорректный токен");
+            throw new InvalidOperationException("Не найден пользователь по данному токену");
 
         var authorizationData = new AuthorizationData
         {

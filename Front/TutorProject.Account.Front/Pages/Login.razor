@@ -61,7 +61,7 @@
         if (result.IsSuccessful)
         {
             await _authorizationService.AuthorizeAsync(result.ResponseDto!.AuthorizationToken);
-            NavigationManager.NavigateTo($"chats");
+            NavigationManager.NavigateTo($"Account");
         }
 
         LoginFailed = true;
@@ -70,7 +70,7 @@
     protected override async Task OnInitializedAsync()
     {
         if (await _authorizationService.IsAuthorizedAsync())
-            NavigationManager.NavigateTo("Account");
+            NavigationManager.NavigateTo($"Account");
     }
 
 }
