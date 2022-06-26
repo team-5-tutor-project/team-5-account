@@ -323,7 +323,7 @@ else{
 			<p class="g-pstyle1">Чаты</p>
 		</div>
 		<div id="g-ai4-3" class="g-_ g-aiAbs g-aiPointText" style="top:18.9634%;margin-top:-22.7px;left:4.3575%;width:215px;">
-			<p class="g-pstyle2">Личный кабинет</p>
+			<a href="/Account" class="g-pstyle2">Личный кабинет</a>
 		</div>
 		<div id="g-ai4-4" class="g-_ g-aiAbs g-aiPointText" style="top:25.5654%;margin-top:-22.5px;left:23.4773%;width:163px;">
 			<p class="g-pstyle3">Репетитор</p>
@@ -379,13 +379,14 @@ else{
 			<p class="g-pstyle2">Чаты</p>
 		</div>
 		<div id="g-ai4-7" class="g-_ g-aiAbs g-aiPointText" style="top:33.7134%;margin-top:-22.7px;left:4.3575%;width:234px;">
-			<p class="g-pstyle2">Найти репетитора</p>
+			<a href="@SearcherLink" class="g-pstyle2">Найти репетитора</a>
 		</div>
 	</div>
 </div>
 }
 
 @code {
+	private string SearcherLink => $"http://localhost:7000/search/{_authData?.Token}";
     private List<Chat>? _chats;
     private AuthorizationData _authData;
 

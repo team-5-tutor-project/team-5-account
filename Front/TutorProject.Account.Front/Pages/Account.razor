@@ -325,10 +325,10 @@
 			<p class="g-pstyle3">Имя</p>
 		</div>
 		<div id="g-ai2-5" class="g-_ g-aiAbs g-aiPointText" style="top:26.0884%;margin-top:-22.7px;left:4.3575%;width:80px;">
-			<p class="g-pstyle2">Чаты</p>
+			<a href="/chats" class="g-pstyle2">Чаты</a>
 		</div>
 		<div id="g-ai2-6" class="g-_ g-aiAbs g-aiPointText" style="top:33.7134%;margin-top:-22.7px;left:4.3575%;width:234px;">
-			<p class="g-pstyle2">Найти репетитора</p>
+			<a href="@SearcherLink" class="g-pstyle2">Найти репетитора</a>
 		</div>
 		<div id="g-ai2-7" class="g-_ g-aiAbs g-aiPointText" style="top:33.9634%;margin-top:-22.7px;left:23.629%;width:120px;">
 			<p class="g-pstyle3">Обо мне</p>
@@ -391,6 +391,7 @@
 	}
 
 @code {
+	private string SearcherLink => $"http://localhost:7000/search/{_authData?.Token}";
     private string? Name { get; set; }
     private string? Price { get; set; }
     private string? IntervalClass { get; set; }
