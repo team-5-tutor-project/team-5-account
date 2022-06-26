@@ -39,13 +39,29 @@
 
 ### Посмотреть реализацию проекта можно по [ссылке]()
 
-### Личный кабинет (в разработке):
+### Основная страница:
 
-### Страница регистрации (в разработке):
+![FireShot Capture 404 - Index - tutor-project-account herokuapp com](https://user-images.githubusercontent.com/79146846/175837740-7298516b-c885-4355-abba-797d636a2f1f.png)
 
-### Страница авторизации (в разработке):
+### Страница регистрации:
 
-### Список чатов пользователя (в разработке):
+![image](https://user-images.githubusercontent.com/79146846/175837781-f37e7428-9bc1-4ce1-b0ee-489cf4cf1437.png)
+
+### Страница авторизации:
+
+![image](https://user-images.githubusercontent.com/79146846/175837769-614714da-cbe7-408a-9758-d81406d192df.png)
+
+### Личный кабинет репетитора:
+
+![image](https://user-images.githubusercontent.com/79146846/175837841-d930344f-e4a4-4ef4-9d92-0c687430d106.png)
+
+### Личный кабинет клиента:
+
+![image](https://user-images.githubusercontent.com/79146846/175837818-df520847-4107-4557-a477-e327ca568c8b.png)
+
+### Список чатов пользователя:
+
+![image](https://user-images.githubusercontent.com/79146846/175837855-b8da8ef1-8170-44b2-afa2-85071783097e.png)
 
 ## Instruction
 
@@ -59,7 +75,8 @@
 ### Шаг 2. Запустите фронт (модуль \team-5-account\Front).
 
 ### Так выглядит корректно запущенный фронт:
-![image](https://user-images.githubusercontent.com/79146846/173901306-c0320d7f-2f61-411b-9d2a-752da45c4978.png)
+
+![image](https://user-images.githubusercontent.com/79146846/175837884-b82a026c-7471-4b25-8c02-98a92d825b48.png)
 
 ### Шаг 3. Модуль "Аккаунт" запущен, можно работать. Well done!
 
