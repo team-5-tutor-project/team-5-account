@@ -1,10 +1,10 @@
 ﻿@page "/Login"
 @using TutorProject.Account.Front.Dtos
-@using TutorProject.Account.Front.Dtos.Token
 @using TutorProject.Account.Front.Models
+@using TutorProject.Account.Front.Services
 @inject NavigationManager NavigationManager
 @inject HttpService _httpService
-@inject HttpClient _http
+@inject AuthorizationService _authorizationService
 
 <title>TutorService</title>
 <h1>Добро пожаловать в TutorService</h1>
@@ -57,19 +57,20 @@
             Password = Password
         };
 
-        var loginUri = "api/authorization";
-        var response = await _httpService.PostWithBody<LoginResponseDto>(loginUri, loginRequest);
-        if (response.IsSuccessful)
+        var result = await _httpService.PostWithBodyAsync<LoginResponseDto>("api/authorization", loginRequest);
+        if (result.IsSuccessful)
         {
-            var token = response.Result.AuthorizationToken;
-            MainController.IsAuthorized = true;
-            var user = await _http.GetAsync($"/api/authorization?token={token}");
-            MainController.Token = token;
-            var responseDto = await user.Content.ReadFromJsonAsync<TokenResponseDto>();
-            MainController.User = responseDto.UserType;
-            NavigationManager.NavigateTo($"/");
+            await _authorizationService.AuthorizeAsync(result.ResponseDto!.AuthorizationToken);
+            NavigationManager.NavigateTo($"chats");
         }
 
         LoginFailed = true;
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await _authorizationService.IsAuthorizedAsync())
+            NavigationManager.NavigateTo("Account");
+    }
+
 }

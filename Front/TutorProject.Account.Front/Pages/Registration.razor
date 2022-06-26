@@ -1,27 +1,42 @@
 ﻿@page "/Registration"
 @using TutorProject.Account.Front.Models
 @using TutorProject.Account.Front.Dtos.Registation
+@using TutorProject.Account.Front.Services
 @inject HttpService _httpService
+@inject AuthorizationService _authorizationService
 @inject NavigationManager NavigationManager
 
 <h1>Регистрация в TutorService</h1>
-<h2>Зарегистрироваться как 
-<button class="btn btn-primary" @onclick="ChangeUserType">
-    @switch (UserType)
-    {
-        case UserType.Client:
-            <a>Клиент</a>
-            break;
-        case UserType.Tutor:
-            <a>Репетитор</a>
-            break;
-    }
-</button>
+<h2>
+    Зарегистрироваться как
+    <button class="btn btn-primary" @onclick="ChangeUserType">
+        @switch (UserType)
+        {
+            case UserType.Client:
+                <a>Клиент</a>
+                break;
+            case UserType.Tutor:
+                <a>Репетитор</a>
+                break;
+        }
+    </button>
 </h2>
 <p></p>
-<p><input @bind="Username" placeholder="login"></p>
-<p><input @bind="Password" type="password" placeholder="password"></p>
-<p><input @bind="Name" placeholder="Имя"/></p>
+<p>
+    <input @bind="Username" placeholder="Логин">
+</p>
+<p>
+    <input @bind="Password" type="password" placeholder="Пароль">
+</p>
+<p>
+    <input @bind="Name" placeholder="Имя"/>
+</p>
+@if (UserType is UserType.Tutor)
+{
+    <p>
+        <input @bind="Subject" placeholder="Ваш предмет"/>
+    </p>
+}
 <p></p>
 <button class="btn btn-dark" @onclick="OnSignUpButtonClick">Зарегистрироваться</button>
 <p></p>
@@ -34,13 +49,14 @@
 
 @code {
     private UserType UserType { get; set; }
-    
+
     private string Username { get; set; }
     private string Password { get; set; }
     private string Name { get; set; }
-    
+    private string Subject { get; set; }
+
     private bool RegistrationFailed { get; set; }
-    
+
     void ChangeUserType()
     {
         UserType = UserType switch {
@@ -49,23 +65,48 @@
             _ => throw new InvalidOperationException()
             };
     }
-    
-    async Task OnSignUpButtonClick()
+
+    async Task<RequestResult<RegistrationResponseDto?>> SignUpTutor()
     {
-        var registrationRequest = new RegistrationRequestDto
+        var clientRegistrationDto = new TutorRegistrationDto
+        {
+            Login = Username,
+            Name = Name,
+            Password = Password,
+            Subject = Subject
+        };
+
+        var registrationUri = "api/tutors/sign_up";
+
+        return await _httpService.PostWithBodyAsync<RegistrationResponseDto>(registrationUri, clientRegistrationDto);
+    }
+
+    async Task<RequestResult<RegistrationResponseDto?>> SignUpClient()
+    {
+        var clientRegistrationDto = new ClientRegistrationDto
         {
             Login = Username,
             Name = Name,
             Password = Password
         };
 
-        var registrationUri = "api/" + (UserType == UserType.Client ? "clients" : "tutors") + "/sign_up";
+        var registrationUri = "api/clients/sign_up";
 
-        var result = await _httpService.PostWithBody<RegistrationRequestDto>(registrationUri, registrationRequest);
+        return await _httpService.PostWithBodyAsync<RegistrationResponseDto>(registrationUri, clientRegistrationDto);
+    }
+
+    async Task OnSignUpButtonClick()
+    {
+        var result = UserType switch {
+            UserType.Client => await SignUpClient(),
+            UserType.Tutor => await SignUpTutor(),
+            _ => throw new InvalidOperationException()
+        };
 
         if (result.IsSuccessful)
         {
-            NavigationManager.NavigateTo("/Login");
+            await _authorizationService.AuthorizeAsync(result.ResponseDto!.AuthorizationToken);
+            NavigationManager.NavigateTo($"Account");
         }
 
         RegistrationFailed = true;

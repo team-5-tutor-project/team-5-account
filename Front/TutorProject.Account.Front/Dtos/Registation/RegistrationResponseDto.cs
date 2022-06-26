@@ -2,5 +2,5 @@
 
 public class RegistrationResponseDto
 {
-    public string Name { get; set; }
+    public string AuthorizationToken { get; set; }
 }

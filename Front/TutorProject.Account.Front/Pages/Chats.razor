@@ -1,14 +1,10 @@
-﻿@page "/chats/{token}"
+﻿@page "/chats"
 @using TutorProject.Account.Front.Models
-@using TutorProject.Account.Front.Dtos.Token
+@using TutorProject.Account.Front.Services
 @inject NavigationManager NavigationManager
-@inject HttpClient _http
+@inject HttpService _httpService
+@inject AuthorizationService _authorizationService
 <PageTitle>Chats</PageTitle>
-
-@if (!MainController.IsAuthorized)
-{
-    NavigationManager.NavigateTo("/Login");
-}
 
 <h1>Chats</h1>
 
@@ -26,7 +22,7 @@ else
             </tr>
         </thead>
         <tbody>
-        @if (MainController.User == "Tutor")
+        @if (_authData.UserType == "Tutor")
         {
             @foreach (var chat in _chats)
             {
@@ -36,13 +32,13 @@ else
                 </tr>
             }
         }
-        @if (MainController.User == "Client")
+        @if (_authData.UserType == "Client")
                 {
                     @foreach (var chat in _chats)
                     {
                         <tr>
                             <td>@chat.TutorName</td>
-                            <a href="http://localhost:5067/chat/@UserId">link to chat</a>
+                            <a href="http://localhost:9000/chat/@chat.ChatId/@_authData.Token">link to chat</a>
                         </tr>
                     }
                 }
@@ -51,41 +47,22 @@ else
 }
 
 @code {
-    [Parameter]
-    public string token { get; set; }
-    
-    private Guid? UserId { get; set; }
-    private string? UserType { get; set; }
     private List<Chat>? _chats;
+    private AuthorizationData _authData;
 
     private async Task GetChats()
     {
-        var response = await _http.GetAsync($"/api/chats?token={token}");
-        _chats = await response.Content.ReadFromJsonAsync<List<Chat>>();
+        var result = await _httpService.GetAsync<List<Chat>>($"/api/chats?token={_authData.Token}");
+        _chats = result.ResponseDto;
     }
 
-    private async Task<bool> Authorize()
-    {
-        var response = await _http.GetAsync($"/api/authorization?token={token}");
-        
-        if (!response.IsSuccessStatusCode)
-            return true;
-        
-        var responseDto = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
-        UserId = responseDto?.UserId;
-        UserType = responseDto?.UserType;
-
-        return false;
-    }
-    
     protected override async Task OnInitializedAsync()
     {
-        var authorizationFailed = await Authorize();
-        
-        if (authorizationFailed)
-            NavigationManager.NavigateTo("/Login");
-        
+        var authData = await _authorizationService.GetAuthData();
+        if (authData is null)
+            NavigationManager.NavigateTo("Login");
+
+        _authData = authData!;
         await GetChats();
     }
-    
 }

@@ -1,8 +1,10 @@
 ﻿@page "/"
+@using TutorProject.Account.Front.Services
 @inject NavigationManager NavigationManager
+@inject AuthorizationService _authorizationService;
 <PageTitle>Index</PageTitle>
 
-@if (!MainController.IsAuthorized)
+@if (!_isAuthorized)
 {
     NavigationManager.NavigateTo("/Login");
 }
@@ -12,3 +14,13 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?"/>
+
+@code
+{
+    private bool _isAuthorized;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _isAuthorized = await _authorizationService.IsAuthorizedAsync();
+    }
+}

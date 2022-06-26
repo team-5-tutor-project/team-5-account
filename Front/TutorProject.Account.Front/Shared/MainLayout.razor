@@ -1,7 +1,9 @@
-﻿@inherits LayoutComponentBase
+﻿@using TutorProject.Account.Front.Services
+@inherits LayoutComponentBase
+@inject AuthorizationService _authorizationService
 
 <div class="page">
-    @if (MainController.IsAuthorized)
+    @if (_isAuthorized)
     {
         <div class="sidebar">
             <NavMenu/>
@@ -18,3 +20,19 @@
         </article>
     </main>
 </div>
+
+@code
+{
+    private bool _isAuthorized = false;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _isAuthorized = await _authorizationService.IsAuthorizedAsync();
+        AuthorizationService.UserAuthorized += OnUserAuthorized;
+    }
+
+    private async Task OnUserAuthorized()
+    {
+        _isAuthorized = await _authorizationService.IsAuthorizedAsync();
+    }
+}
