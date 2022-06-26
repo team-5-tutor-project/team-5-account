@@ -20,10 +20,16 @@ namespace TutorProject.Account.BLL.Tutors.Services
             _context = context;
             _subjectService = subjectService;
         }
+        
+        public async Task<string> GetName(Guid tutorID)
+        {
+            var tutor = await _context.Tutors.FirstAsync(tutor => tutor.Id == tutorID);
+            return tutor?.Name;
+        }
 
         public async Task<Tutor> SignUp(TutorSignUpData tutorData)
         {
-            var tutorWithSameLogin = await _context.Tutors.FirstOrDefaultAsync(tutor => tutor.Login == tutorData.Login);
+            var tutorWithSameLogin = await _context.Tutors.SingleOrDefaultAsync(tutor => tutor.Login == tutorData.Login);
 
             if (tutorWithSameLogin is not null)
             {

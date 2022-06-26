@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -56,5 +57,23 @@ namespace TutorProject.Account.Web.Controllers.ClientController
 
             return _mapper.Map<ClientDto>((Client)user);
         }
+        
+        [HttpGet("{clientID}/name")]
+        [SwaggerOperation(Summary = "Получить имя ученика по ID")]
+        public async Task<ActionResult<ClientNameDto>> GetClientName([FromRoute]Guid clientID)
+        {
+            var name = await _clientService.GetName(clientID);
+            
+            if (name is null)
+                return BadRequest("Не найдено имя ученика");
+
+            ClientNameDto clientNameDto = new ClientNameDto()
+            {
+                Name = name
+            };
+
+            return clientNameDto;
+        }
+        
     }
 }
