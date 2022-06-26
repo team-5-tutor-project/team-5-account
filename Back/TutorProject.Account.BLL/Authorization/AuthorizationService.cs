@@ -83,17 +83,27 @@ namespace TutorProject.Account.BLL.Authorization
 
         private async Task<AuthorizationToken> GetActiveToken(User user)
         {
-            return await _tutorContext.AuthorizationTokens
-                .SingleOrDefaultAsync(token => token.Owner == user && token.ExpireAt > DateTime.Now && !token.Canceled);
+            var tokens = await _tutorContext.AuthorizationTokens
+                .Where(token => token.Owner == user && !token.Canceled)
+                .ToListAsync();
+
+            var token = tokens
+                .SingleOrDefault(token => token.ExpireAt.CompareTo(DateTime.Now) > 0);
+            
+            return token;
         }
 
         public async Task<User> GetUserByToken(string tokenString)
         {
+
             var token = await _tutorContext.AuthorizationTokens
                 .Include(x => x.Owner)
-                .SingleOrDefaultAsync(x => x.Token == tokenString);
+                .Where(token => token.Token == tokenString && !token.Canceled)
+                .SingleOrDefaultAsync();
+            
+            
 
-            if (token is null || !token.Active)
+            if (token is null || token.ExpireAt.CompareTo(DateTime.Now) < 0)
                 return null;
 
             return token.Owner;

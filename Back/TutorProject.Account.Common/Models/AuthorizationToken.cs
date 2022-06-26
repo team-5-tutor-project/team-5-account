@@ -17,9 +17,6 @@ namespace TutorProject.Account.Common.Models
 
         public bool Canceled { get; set; } = false;
 
-        [NotMapped] 
-        public bool Active => DateTime.Now < ExpireAt && !Canceled;
-
         public AuthorizationToken()
         {
             Token = GenerateToken();

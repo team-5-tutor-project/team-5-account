@@ -305,7 +305,7 @@
 	}
 
 </style>
-@if (_authData.UserType == "Client")
+@if (_authData?.UserType == "Client")
 {
 	<div id="g-_-_-box" class="ai2html">
 	<!-- Artboard: Artboard_3 -->
@@ -322,22 +322,26 @@
 			<p class="g-pstyle2">Личный кабинет</p>
 		</div>
 		<div id="g-ai2-4" class="g-_ g-aiAbs g-aiPointText" style="top:25.9634%;margin-top:-22.7px;left:23.629%;width:70px;">
-			<p class="g-pstyle3">Имя</p>
+			<p class="g-pstyle3">@Name</p>
 		</div>
 		<div id="g-ai2-5" class="g-_ g-aiAbs g-aiPointText" style="top:26.0884%;margin-top:-22.7px;left:4.3575%;width:80px;">
-			<a href="/chats" class="g-pstyle2">Чаты</a>
+			<p class="g-pstyle2">
+				<a href="/chats" style="text-decoration: none; color: white" class="g-pstyle2">Чаты</a>
+			</p>
 		</div>
 		<div id="g-ai2-6" class="g-_ g-aiAbs g-aiPointText" style="top:33.7134%;margin-top:-22.7px;left:4.3575%;width:234px;">
-			<a href="@SearcherLink" class="g-pstyle2">Найти репетитора</a>
+			<p class="g-pstyle2">
+			<a style="text-decoration: none; color: white" href="@SearcherLink" class="g-pstyle2">Найти репетитора</a>
+			</p>
 		</div>
 		<div id="g-ai2-7" class="g-_ g-aiAbs g-aiPointText" style="top:33.9634%;margin-top:-22.7px;left:23.629%;width:120px;">
-			<p class="g-pstyle3">Обо мне</p>
+			<p class="g-pstyle3">@Description</p>
 		</div>
 	</div>
 	</div>
 }
 
-	@if (_authData.UserType == "Tutor")
+	@if (_authData?.UserType == "Tutor")
 	{
 		<div id="g-_-_-box" class="ai2html">
 			<!-- Artboard: Artboard_4 -->
@@ -354,10 +358,10 @@
 					<p class="g-pstyle2">Личный кабинет</p>
 				</div>
 				<div id="g-ai3-4" class="g-_ g-aiAbs g-aiPointText" style="top:25.9634%;margin-top:-22.7px;left:23.629%;width:70px;">
-					<p class="g-pstyle3">Имя</p>
+					<p class="g-pstyle3">@Name</p>
 				</div>
 				<div id="g-ai3-5" class="g-_ g-aiAbs g-aiPointText" style="top:26.0884%;margin-top:-22.7px;left:4.3575%;width:80px;">
-					<p class="g-pstyle2">Чаты</p>
+			<a style="text-decoration: none; color: white" href="/chats" class="g-pstyle2">Чаты</a>
 				</div>
 				<div id="g-ai3-6" class="g-_ g-aiAbs g-aiPointText" style="top:33.0496%;margin-top:-16.4px;left:44.1867%;width:85px;">
 					<p class="g-pstyle4">У себя</p>
@@ -384,12 +388,12 @@
 					<p class="g-pstyle3">Цена в час</p>
 				</div>
 				<div id="g-ai3-14" class="g-_ g-aiAbs g-aiPointText" style="top:50.2134%;margin-top:-22.7px;left:23.629%;width:120px;">
-					<p class="g-pstyle3">Обо мне</p>
+					<p class="g-pstyle3">@Description</p>
 				</div>
 			</div>
 		</div>
 	}
-
+<button class="btn" onclick="@LogOut">Выйти</button>
 @code {
 	private string SearcherLink => $"http://localhost:7000/search/{_authData?.Token}";
     private string? Name { get; set; }

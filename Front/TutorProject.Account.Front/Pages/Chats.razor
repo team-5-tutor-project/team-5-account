@@ -315,7 +315,14 @@ else{
 	<!-- Artboard: Artboard_5 -->
 	<div id="g-_-_-Artboard_5" class="g-artboard" style="max-width: 1600px;max-height: 800px" data-aspect-ratio="2" data-min-width="0">
 		<div style="padding: 0 0 50% 0;"></div>
-		<img id="g-_-_-Artboard_5-img" class="g-_-_-Artboard_5-img g-aiImg" alt="" src="https://i.ibb.co/GCT2dNn/Artboard-5.png"/>
+		@if (_authData?.UserType == "Client")
+		{
+			<img id="g-_-_-Artboard_5-img" class="g-_-_-Artboard_5-img g-aiImg" alt="" src="https://i.ibb.co/GCT2dNn/Artboard-5.png"/>
+		}
+		@if (_authData?.UserType == "Tutor")
+        		{
+        			<img id="g-_-_-Artboard_5-img" class="g-_-_-Artboard_5-img g-aiImg" alt="" src="https://i.ibb.co/BV01wKt/Tutor-Account.png"/>
+        		}
 		<div id="g-ai4-1" class="g-_ g-aiAbs g-aiPointText" style="top:7.5963%;margin-top:-42.8px;left:1.4966%;width:272px;">
 			<p class="g-pstyle0">TUTORSERVICE</p>
 		</div>
@@ -323,13 +330,15 @@ else{
 			<p class="g-pstyle1">Чаты</p>
 		</div>
 		<div id="g-ai4-3" class="g-_ g-aiAbs g-aiPointText" style="top:18.9634%;margin-top:-22.7px;left:4.3575%;width:215px;">
-			<a href="/Account" class="g-pstyle2">Личный кабинет</a>
+			<p class="g-pstyle2">
+				<a href="/Account" style="text-decoration: none; color: white" class="g-pstyle2">Личный кабинет</a>
+			</p>
 		</div>
 		<div id="g-ai4-4" class="g-_ g-aiAbs g-aiPointText" style="top:25.5654%;margin-top:-22.5px;left:23.4773%;width:163px;">
 			<p class="g-pstyle3">Репетитор</p>
 			<table style="margin-top:20px; margin-left:20px">
                             <tbody>
-                            @if (_authData.UserType == "Tutor")
+                            @if (_authData?.UserType == "Tutor")
                             {
                                 @foreach (var chat in _chats)
                                 {
@@ -338,7 +347,7 @@ else{
                                     </tr>
                                 }
                             }
-                            @if (_authData.UserType == "Client")
+                            @if (_authData?.UserType == "Client")
                                     {
                                         @foreach (var chat in _chats)
                                         {
@@ -354,7 +363,7 @@ else{
 			<p class="g-pstyle3">Ссылка</p>
 			<table style="margin-top:20px; margin-left:20px">
                                         <tbody>
-                                        @if (_authData.UserType == "Tutor")
+                                        @if (_authData?.UserType == "Tutor")
                                         {
                                             @foreach (var chat in _chats)
                                             {
@@ -363,12 +372,12 @@ else{
                                                 </tr>
                                             }
                                         }
-                                        @if (_authData.UserType == "Client")
+                                        @if (_authData?.UserType == "Client")
                                                 {
                                                     @foreach (var chat in _chats)
                                                     {
                                                         <tr>
-                                                            <a href="http://localhost:9000/chat/@chat.ChatId/@_authData.Token">link to chat</a>
+                                                            <a style="text-decoration: none; color: white" href="http://localhost:9000/chat/@chat.ChatId/@_authData.Token">link to chat</a>
                                                         </tr>
                                                     }
                                                 }
@@ -378,9 +387,14 @@ else{
 		<div id="g-ai4-6" class="g-_ g-aiAbs g-aiPointText" style="top:26.0884%;margin-top:-22.7px;left:4.3575%;width:80px;">
 			<p class="g-pstyle2">Чаты</p>
 		</div>
-		<div id="g-ai4-7" class="g-_ g-aiAbs g-aiPointText" style="top:33.7134%;margin-top:-22.7px;left:4.3575%;width:234px;">
-			<a href="@SearcherLink" class="g-pstyle2">Найти репетитора</a>
-		</div>
+		@if (_authData?.UserType == "Client")
+		{
+			<div id="g-ai4-7" class="g-_ g-aiAbs g-aiPointText" style="top:33.7134%;margin-top:-22.7px;left:4.3575%;width:234px;">
+				<p class="g-pstyle2">
+				<a href="@SearcherLink" style="text-decoration: none; color: white" class="g-pstyle2">Найти репетитора</a>
+				</p>
+			</div>
+		}
 	</div>
 </div>
 }
