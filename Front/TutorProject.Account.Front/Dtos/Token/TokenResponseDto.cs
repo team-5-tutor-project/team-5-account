@@ -1,8 +1,10 @@
-﻿namespace TutorProject.Account.Front.Dtos.Token;
+﻿using System;
+
+namespace TutorProject.Account.Front.Dtos.Token;
 
 public class TokenResponseDto
 {
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
         
     public string UserType { get; set; }
 }

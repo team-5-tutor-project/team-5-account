@@ -2,6 +2,7 @@
 {
     public enum WorkFormat
     {
+        Empty,
         Online,
         ClientHome,
         TutorHome

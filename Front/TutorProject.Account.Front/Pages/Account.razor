@@ -1,0 +1,120 @@
+﻿@page "/account/{token}"
+@using TutorProject.Account.Front.Models
+@using TutorProject.Account.Front.Dtos.Token
+@using TutorProject.Account.Common.Models
+@inject NavigationManager NavigationManager
+@inject HttpClient _http
+<PageTitle>Личный кабинет</PageTitle>
+
+<h1>Личный кабинет</h1>
+
+@if (!MainController.IsAuthorized)
+{
+    NavigationManager.NavigateTo("/Login");
+}
+
+@if (Name == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class='table'>
+        <tbody>
+        <tr>
+            <td>Имя</td>
+            <td>@Name</td>
+        </tr>
+        @if (MainController.User == "Client")
+        {
+        }
+        @if (MainController.User == "Tutor")
+        {
+            <tr>
+                <td>Цена за час занятия:</td>
+                <td>@Price</td>
+            </tr>
+            <tr>
+                <td>Классы у которых ведет репетитор:</td>
+                <td>@Price</td>
+            </tr>
+            <tr>
+                <td>Формат работы:</td>
+                <td>@WorkFormat</td>
+            </tr>
+            <tr>
+                <td>Описание</td>
+                <td>@Description</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string token { get; set; }
+    
+    private Guid? UserId { get; set; }
+    private string? UserType { get; set; }
+    
+    private string? Name { get; set; }
+    private string? Price { get; set; }
+    private string? IntervalClass { get; set; }
+    private string? WorkFormat { get; set; }
+    private string? Description { get; set; }
+
+    private async Task GetTutor()
+    {
+        var response = await _http.GetAsync($"/api/tutors?token={token}");
+        var user = await response.Content.ReadFromJsonAsync<Tutor>();
+        
+        Name = user?.Name;
+        Description = user?.Description ?? "пусто";
+        Price = user?.PricePerHour == null ? Convert.ToString(user?.PricePerHour) : "пусто";
+        IntervalClass = (user?.PupilMinClass == null || user?.PupilMaxClass == null) ?
+            Convert.ToString(user?.PupilMinClass) + "-" + Convert.ToString(user?.PupilMaxClass) : "пусто";
+        WorkFormat = user?.WorkFormat switch
+        {
+            Common.Models.WorkFormat.Online => "Онлайн",
+            Common.Models.WorkFormat.ClientHome => "у Клиента",
+            Common.Models.WorkFormat.TutorHome => "У Репетитора",
+            Common.Models.WorkFormat.Empty => "пусто",
+            _ => throw new ArgumentOutOfRangeException()
+            };
+    }
+    
+    private async Task GetClient()
+    {
+        var response = await _http.GetAsync($"/api/clients?token={token}");
+        var user = await response.Content.ReadFromJsonAsync<Client>();
+        Name = user?.Name;
+    }
+
+    private async Task<bool> Authorize()
+    {
+        var response = await _http.GetAsync($"/api/authorization?token={token}");
+        
+        if (!response.IsSuccessStatusCode)
+            return true;
+        
+        var responseDto = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
+        UserId = responseDto?.UserId;
+        UserType = responseDto?.UserType;
+
+        return false;
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authorizationFailed = await Authorize();
+        
+        if (authorizationFailed)
+            NavigationManager.NavigateTo("/Login");
+
+        if (MainController.User == "Client")
+            await GetClient();
+        else
+            await GetTutor();
+    }
+}
