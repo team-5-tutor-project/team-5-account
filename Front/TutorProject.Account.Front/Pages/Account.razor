@@ -186,6 +186,10 @@
 		<div id="g-ai2-7" class="g-_ g-aiAbs g-aiPointText" style="top:33.9634%;margin-top:-22.7px;left:23.629%;width:120px;">
 			<p class="g-pstyle3">@Description</p>
 		</div>
+		<div id="g-ai3-15" class="g-aiAbs" 
+		     style=";top:95.2134%;margin-top:-22.7px;margin-left:-10px;left:2.5%;width:120px;">
+			<button class="btn btn-outline-dark" onclick="@LogOut">Выйти</button>
+		</div>
 	</div>
 	</div>
 }
@@ -263,7 +267,7 @@
 			@if (WorkFormat == Common.Models.WorkFormat.Mixed)
             {
 	            <div class="g-aiAbs form_radio_btn" style="top:33.1746%;margin-top:-16.4px;left:53.2808%;width:144px;">
-		            <input id="radio-4" type="radio" name="workFormat" value="Mixed" checked
+		            <input id="radio-4" type="radio" name="workFormat" value="Mixed" disabled
 		                   @onchange="@(() => UpdateWorkFormat(Common.Models.WorkFormat.Mixed))">
 		            <label for="radio-4" style="top:33.1746%;margin-top:-2px;margin-left:-20px; left:52.2808%;width:160px;">Смешанный</label>
 	            </div>
@@ -271,7 +275,7 @@
             else
             {
 	            <div class="g-aiAbs form_radio_btn" style="top:33.1746%;margin-top:-16.4px;left:53.2808%;width:144px;">
-		            <input id="radio-4" type="radio" name="workFormat" 
+		            <input id="radio-4" type="radio" name="workFormat" disabled
 		                   @onchange="@(() => UpdateWorkFormat(Common.Models.WorkFormat.Mixed))">
 		            <label for="radio-4" style="top:33.1746%;margin-top:-2px;margin-left:-20px; left:52.2808%;width:160px;">Смешанный</label>
 	            </div>
@@ -279,8 +283,8 @@
 			<div id="g-ai3-13" class="g-aiAbs" style="top:41.3384%;margin-top:-22.7px;margin-left:-10px;left:23.629%;width:540px;">
 				<p class="g-pstyle3">
 					Цена в час:<input size="1" @bind="NewPrice" placeholder="@NewPrice">
-					Мин:<input size="1" @bind="NewMaxClass" placeholder="@NewMaxClass">
-					Макс:<input size="1" @bind="NewMinClass" placeholder="@NewMinClass">
+					Мин:<input size="1" @bind="NewMinClass" placeholder="@NewMinClass">
+					Макс:<input size="1" @bind="NewMaxClass" placeholder="@NewMaxClass">
 				</p>
 			</div>
 			<div id="g-ai3-14" class="g-_ g-aiAbs g-aiPointText" style="top:50.2134%;margin-top:-22.7px;margin-left:-10px;left:23.629%;width:120px;">
@@ -332,7 +336,7 @@
         Description = user?.Description ?? "пусто";
         Price = user?.PricePerHour ?? 0;
 	    MinClass = user?.PupilMinClass ?? 1;
-	    MinClass = user?.PupilMaxClass ?? 11;
+	    MaxClass = user?.PupilMaxClass ?? 11;
 	    WorkFormat = user?.WorkFormat ?? Common.Models.WorkFormat.Online;
 
 	    NewDescription = Description;
@@ -365,7 +369,11 @@
 			PupilMaxClass = NewMaxClass,
 		};
 
-		await _HttpService.PatchWithBodyAsync<Task>("api/tutors", changeDto);
+		var result = await _HttpService.PatchWithBodyAsync<Task>($"api/tutors?token={_authData.Token}", changeDto);
+		if (!result.IsSuccessful)
+		{
+			throw new Exception("не удалось обновить описание");
+		}
 	}
 
 
