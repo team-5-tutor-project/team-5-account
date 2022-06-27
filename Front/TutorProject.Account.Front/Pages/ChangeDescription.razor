@@ -1,0 +1,32 @@
+﻿@page "/changeDescription"
+@using TutorProject.Account.Front.Models
+@using TutorProject.Account.Front.Services
+@inject NavigationManager NavigationManager
+@inject HttpService _HttpService
+@inject AuthorizationService _authorizationService;
+
+<fieldset>
+    <legend>Изменить описание</legend>
+    <label>Цена в час:<input type="text" required></label>
+    <label>E-mail<input type="email" required></label>
+</fieldset>
+
+<button class="btn" onclick="@BackButtonClick">Назад</button>
+
+@code {
+    private AuthorizationData _authData;
+    
+    async Task BackButtonClick()
+    {
+        NavigationManager.NavigateTo("account");
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authData = await _authorizationService.GetAuthData();
+        if (authData is null)
+            NavigationManager.NavigateTo("Login");
+
+        _authData = authData!;
+    }
+}
