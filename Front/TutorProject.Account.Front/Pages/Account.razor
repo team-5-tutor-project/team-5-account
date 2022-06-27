@@ -170,7 +170,17 @@
 		</div>
 		<div id="g-ai2-6" class="g-_ g-aiAbs g-aiPointText" style="top:33.7134%;margin-top:-22.7px;left:4.3575%;width:234px;">
 			<p class="g-pstyle2">
-			<a style="text-decoration: none; color: white" href="@SearcherLink" class="g-pstyle2">Найти репетитора</a>
+				<a style="text-decoration: none; color: white" href="@SearcherLink" class="g-pstyle2">Найти репетитора</a>
+			</p>
+		</div>
+		<div id="g-ai2-6" class="g-_ g-aiAbs g-aiPointText" style="top:40.7134%;margin-top:-22.7px;left:4.3575%;width:234px;">
+			<p class="g-pstyle2">
+				<a style="text-decoration: none; color: white" href="@BlacklistLink" class="g-pstyle2">Избранные</a>
+			</p>
+		</div>
+		<div id="g-ai2-6" class="g-_ g-aiAbs g-aiPointText" style="top:47.7134%;margin-top:-22.7px;left:4.3575%;width:234px;">
+			<p class="g-pstyle2">
+				<a style="text-decoration: none; color: white" href="@FavoritesLink" class="g-pstyle2">Чёрный список</a>
 			</p>
 		</div>
 		<div id="g-ai2-7" class="g-_ g-aiAbs g-aiPointText" style="top:33.9634%;margin-top:-22.7px;left:23.629%;width:120px;">
@@ -276,15 +286,28 @@
 			<div id="g-ai3-14" class="g-_ g-aiAbs g-aiPointText" style="top:50.2134%;margin-top:-22.7px;margin-left:-10px;left:23.629%;width:120px;">
 				<p class="g-pstyle3"><textarea cols="53" rows="5" @bind="NewDescription" placeholder="@NewDescription"></textarea></p>
 			</div>
-			<div id="g-ai3-15" class="g-aiAbs" style="top:82.2134%;margin-top:-22.7px;margin-left:-10px;left:23.629%;width:120px;">
-				<button @onclick="@OnChangeDescriptionButtonClick" class="btn">Изменить описание</button>
+			<div id="g-ai3-15" class="g-aiAbs" 
+			     style="border:1px;border-color: #1c1f23;top:82.2134%;margin-top:-22.7px;margin-left:-10px;left:23.629%;width:120px;">
+				<button @onclick="@OnChangeDescriptionButtonClick" class="btn btn-outline-dark">Изменить описание</button>
+			</div>
+			<div id="g-ai3-15" class="g-aiAbs" 
+                 style="border:1px;border-color: #1c1f23;top:82.2134%;margin-top:-22.7px;margin-left:-10px;left:32.629%;width:120px;">
+            	<a href="@ScheduleLink" class="btn btn-outline-dark">Изменить расписание</a>
+            </div>
+			<div id="g-ai3-15" class="g-aiAbs" 
+			     style=";top:95.2134%;margin-top:-22.7px;margin-left:-10px;left:2.5%;width:120px;">
+				<button class="btn btn-outline-dark" onclick="@LogOut">Выйти</button>
 			</div>
 		</div>
 	</div>
 }
-<button class="btn" onclick="@LogOut">Выйти</button>
+
 @code {
 	private string SearcherLink => $"http://localhost:7000/search/{_authData?.Token}";
+	private string ScheduleLink => $"http://localhost:7000/Schedule-editor/{_authData?.Token}";
+	private string FavoritesLink => $"http://localhost:7000/Favorites/{_authData?.Token}";
+	private string BlacklistLink => $"http://localhost:7000/Blacklist/{_authData?.Token}";
+	
     private string? Name { get; set; }
     private int? Price { get; set; }
 	private int? MinClass { get; set; }
@@ -344,6 +367,7 @@
 
 		await _HttpService.PatchWithBodyAsync<Task>("api/tutors", changeDto);
 	}
+
 
 	private async Task UpdateWorkFormat(WorkFormat i)
 	{
